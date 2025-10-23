@@ -1,20 +1,29 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|--------------------------------------------------------------------------
+| Atlas Tours & Travel - Web Routes
+|--------------------------------------------------------------------------
+|
+| This file defines all public routes for the Atlas Tours website.
+| Breeze authentication routes are defined in auth.php
+|
+*/
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Home page - displays featured tours and testimonials
+Route::get('/', [SiteController::class, 'home'])->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Tours index - displays all tours with filtering options
+Route::get('/tours', [SiteController::class, 'toursIndex'])->name('tours.index');
 
+// Individual tour detail page - displays full itinerary and booking form
+Route::get('/tours/{slug}', [SiteController::class, 'toursShow'])->name('tours.show');
+
+// Contact page - displays contact information and enquiry form
+Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
+
+// Keep Breeze authentication routes
 require __DIR__.'/auth.php';
