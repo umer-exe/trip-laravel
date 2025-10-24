@@ -13,7 +13,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {{-- Destination Card 1 - Japan --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-pink-400 to-red-500"></div>
+                <img src="/images/destinations/japan.jpg" alt="Japan" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-400 to-red-500 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Japan</h3>
@@ -23,7 +24,8 @@
 
             {{-- Destination Card 2 - Northern Pakistan --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-green-400 to-teal-500"></div>
+                <img src="/images/destinations/pakistan.jpg" alt="Northern Pakistan" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-400 to-teal-500 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Northern Pakistan</h3>
@@ -33,7 +35,8 @@
 
             {{-- Destination Card 3 - Europe --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-600"></div>
+                <img src="/images/destinations/europe.jpg" alt="Europe" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-600 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Europe</h3>
@@ -43,7 +46,8 @@
 
             {{-- Destination Card 4 - Dubai --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+                <img src="/images/destinations/dubai.jpg" alt="Dubai" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-500 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Dubai</h3>
@@ -53,7 +57,8 @@
 
             {{-- Destination Card 5 - Thailand --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-500"></div>
+                <img src="/images/destinations/thailand.jpg" alt="Thailand" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-500 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Thailand</h3>
@@ -63,7 +68,8 @@
 
             {{-- Destination Card 6 - Coastal Pakistan --}}
             <div class="relative group overflow-hidden rounded-lg shadow-lg h-64 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-500"></div>
+                <img src="/images/destinations/coast.jpg" alt="Coastal Pakistan" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-500 opacity-0"></div>
                 <div class="absolute inset-0 bg-black opacity-30 group-hover:opacity-40 transition"></div>
                 <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
                     <h3 class="text-2xl font-bold mb-2">Coastal Pakistan</h3>

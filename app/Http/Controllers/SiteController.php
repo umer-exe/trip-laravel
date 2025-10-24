@@ -47,13 +47,13 @@ class SiteController extends Controller
             ],
             [
                 'id' => 4,
-                'title' => 'Coastal Pakistan Escape',
-                'slug' => 'coastal-pakistan-escape',
-                'image' => '/images/tours/coast.jpg',
-                'duration' => '5 Days',
-                'price' => 599,
-                'type' => 'domestic',
-                'location' => 'Karachi, Gwadar, Ormara'
+                'title' => 'Thailand Paradise',
+                'slug' => 'thailand-beach-paradise',
+                'image' => '/images/tours/thailand.jpg',
+                'duration' => '8 Days',
+                'price' => 1799,
+                'type' => 'international',
+                'location' => 'Phuket, Bangkok, Krabi',
             ],
         ];
 
@@ -130,14 +130,16 @@ class SiteController extends Controller
             ],
             [
                 'id' => 4,
-                'title' => 'Coastal Pakistan Escape',
-                'slug' => 'coastal-pakistan-escape',
-                'image' => '/images/tours/coast.jpg',
-                'duration' => '5 Days',
-                'price' => 599,
-                'type' => 'domestic',
-                'location' => 'Karachi, Gwadar, Ormara',
-                'month' => 'November'
+                'title' => 'Thailand Paradise',
+                'slug' => 'thailand-beach-paradise',
+                'image' => '/images/tours/thailand.jpg',
+                'duration' => '8 Days',
+                'price' => 1799,
+                'type' => 'international',
+                'location' => 'Phuket, Bangkok, Krabi',
+                'month' => 'February'
+
+
             ],
             [
                 'id' => 5,
@@ -163,14 +165,15 @@ class SiteController extends Controller
             ],
             [
                 'id' => 7,
-                'title' => 'Thailand Paradise',
-                'slug' => 'thailand-beach-paradise',
-                'image' => '/images/tours/thailand.jpg',
-                'duration' => '8 Days',
-                'price' => 1799,
-                'type' => 'international',
-                'location' => 'Phuket, Bangkok, Krabi',
-                'month' => 'February'
+                'title' => 'Coastal Pakistan Escape',
+                'slug' => 'coastal-pakistan-escape',
+                'image' => '/images/tours/coast.jpg',
+                'duration' => '5 Days',
+                'price' => 599,
+                'type' => 'domestic',
+                'location' => 'Karachi, Gwadar, Ormara',
+                'month' => 'November'
+
             ],
             [
                 'id' => 8,
@@ -240,10 +243,10 @@ class SiteController extends Controller
                     ['day' => 10, 'title' => 'Departure', 'description' => 'Transfer to Kansai Airport for departure flight']
                 ],
                 'gallery' => [
-                    '/images/tours/japan-1.jpg',
-                    '/images/tours/japan-2.jpg',
-                    '/images/tours/japan-3.jpg',
-                    '/images/tours/japan-4.jpg',
+                    '/images/gallery/japan-1.jpg',
+                    '/images/gallery/japan-2.jpg',
+                    '/images/gallery/japan-3.jpg',
+                    '/images/gallery/japan-4.jpg',
                 ]
             ],
             'northern-pakistan' => [
@@ -273,10 +276,10 @@ class SiteController extends Controller
                     ['day' => 7, 'title' => 'Return to Islamabad', 'description' => 'Morning at Fairy Meadows, return journey to Islamabad']
                 ],
                 'gallery' => [
-                    '/images/tours/pakistan-1.jpg',
-                    '/images/tours/pakistan-2.jpg',
-                    '/images/tours/pakistan-3.jpg',
-                    '/images/tours/pakistan-4.jpg',
+                    '/images/gallery/pakistan-1.jpg',
+                    '/images/gallery/pakistan-2.jpg',
+                    '/images/gallery/pakistan-3.jpg',
+                    '/images/gallery/pakistan-4.jpg',
                 ]
             ],
             'european-highlights' => [
@@ -313,10 +316,103 @@ class SiteController extends Controller
                     ['day' => 14, 'title' => 'Departure', 'description' => 'Last-minute shopping, airport transfer']
                 ],
                 'gallery' => [
-                    '/images/tours/europe-1.jpg',
-                    '/images/tours/europe-2.jpg',
-                    '/images/tours/europe-3.jpg',
-                    '/images/tours/europe-4.jpg',
+                    '/images/gallery/europe-1.jpg',
+                    '/images/gallery/europe-2.jpg',
+                    '/images/gallery/europe-3.jpg',
+                    '/images/gallery/europe-4.jpg',
+                ]
+            ],
+            'thailand-beach-paradise' => [
+                'title' => 'Thailand Paradise',
+                'slug' => 'thailand-beach-paradise',
+                'image' => '/images/tours/thailand.jpg',
+                'duration' => '8 Days / 7 Nights',
+                'price' => 1799,
+                'type' => 'international',
+                'location' => 'Phuket, Bangkok, Krabi',
+                'overview' => 'Sun-kissed beaches, emerald waters, and buzzing city life. From Bangkok’s temples and markets to Phuket’s island-hopping and Krabi’s limestone cliffs, this is Thailand at its best.',
+                'highlights' => [
+                    'Grand Palace and Wat Pho in Bangkok',
+                    'Floating market experience',
+                    'Phuket island-hopping (Phi Phi / Maya Bay, weather permitting)',
+                    'Krabi Railay Beach and Ao Nang promenade',
+                    'Thai cooking class',
+                    'Evening street food tours'
+                ],
+                'itinerary' => [
+                    ['day' => 1, 'title' => 'Arrive Bangkok', 'description' => 'Airport pickup, hotel check-in, evening tuk-tuk ride and street food tasting'],
+                    ['day' => 2, 'title' => 'Bangkok Temples & Markets', 'description' => 'Grand Palace, Wat Pho, Long-tail boat on canals, Asiatique night market'],
+                    ['day' => 3, 'title' => 'Bangkok to Phuket', 'description' => 'Flight to Phuket, beach time, sunset at Promthep Cape'],
+                    ['day' => 4, 'title' => 'Phuket Islands', 'description' => 'Full-day speedboat tour to Phi Phi/Maya Bay or James Bond Island (seasonal)'],
+                    ['day' => 5, 'title' => 'Phuket to Krabi', 'description' => 'Scenic transfer to Krabi, relax at Ao Nang, optional Thai massage'],
+                    ['day' => 6, 'title' => 'Krabi Adventure', 'description' => 'Railay Beach, Phra Nang Cave, kayaking or snorkeling options'],
+                    ['day' => 7, 'title' => 'Krabi Free Day', 'description' => 'Optional cooking class, Emerald Pool & Hot Springs excursion'],
+                    ['day' => 8, 'title' => 'Departure', 'description' => 'Transfer to Krabi/Phuket airport for onward flight']
+                ],
+                'gallery' => [
+                    '/images/gallery/thailand-1.jpg',
+                    '/images/gallery/thailand-2.jpg',
+                    '/images/gallery/thailand-3.jpg',
+                    '/images/gallery/thailand-4.jpg',
+                ]
+            ],
+            'dubai-extravaganza' => [
+                'title' => 'Dubai Extravaganza',
+                'slug' => 'dubai-extravaganza',
+                'image' => '/images/tours/dubai.jpg',
+                'duration' => '5 Days / 4 Nights',
+                'price' => 1299,
+                'type' => 'international',
+                'location' => 'Dubai, Abu Dhabi',
+                'overview' => 'A showcase of futuristic architecture, desert adventures, and luxury shopping. Discover Dubai’s glittering skyline and the cultural gems of Abu Dhabi.',
+                'highlights' => [
+                    'Burj Khalifa At The Top (non-peak)',
+                    'Dubai Marina & Palm Jumeirah photo stops',
+                    'Desert safari with dune bashing and BBQ dinner',
+                    'Abu Dhabi Sheikh Zayed Grand Mosque',
+                    'Old Dubai souks and Dubai Creek',
+                    'Dubai Mall fountain show'
+                ],
+                'itinerary' => [
+                    ['day' => 1, 'title' => 'Arrive Dubai', 'description' => 'Airport transfer, check-in, evening Dubai Mall & fountain show'],
+                    ['day' => 2, 'title' => 'Modern Dubai', 'description' => 'Marina walk, Palm Jumeirah (The Pointe/Atlantis photo stop), Burj Khalifa entry'],
+                    ['day' => 3, 'title' => 'Desert Safari', 'description' => 'Afternoon dune bashing, camel ride, sandboarding, live entertainment, BBQ dinner'],
+                    ['day' => 4, 'title' => 'Abu Dhabi Day Trip', 'description' => 'Sheikh Zayed Grand Mosque, Corniche drive, optional Louvre Abu Dhabi (time permitting)'],
+                    ['day' => 5, 'title' => 'Old Dubai & Departure', 'description' => 'Gold & Spice Souks, Abra ride on Dubai Creek, airport transfer']
+                ],
+                'gallery' => [
+                    '/images/gallery/dubai-1.jpg',
+                    '/images/gallery/dubai-2.jpg',
+                    '/images/gallery/dubai-3.jpg',
+                    '/images/gallery/dubai-4.jpg',
+                ]
+            ],
+            'lahore-heritage-tour' => [
+                'title' => 'Lahore Heritage Tour',
+                'slug' => 'lahore-heritage-tour',
+                'image' => '/images/tours/lahore.jpg',
+                'duration' => '3 Days / 2 Nights',
+                'price' => 399,
+                'type' => 'domestic',
+                'location' => 'Lahore',
+                'overview' => 'Dive into the cultural capital of Pakistan. Mughal-era monuments, rich cuisine, and vibrant bazaars make Lahore unforgettable.',
+                'highlights' => [
+                    'Badshahi Mosque and Lahore Fort (Shahi Qila)',
+                    'Walled City heritage walk and Food Street',
+                    'Shalimar Gardens and Lahore Museum',
+                    'Wagah Border flag-lowering ceremony',
+                    'Anarkali & Liberty market shopping'
+                ],
+                'itinerary' => [
+                    ['day' => 1, 'title' => 'Arrival & Old Lahore', 'description' => 'Check-in, visit Badshahi Mosque, Lahore Fort, Shahi Hammam, evening at Food Street'],
+                    ['day' => 2, 'title' => 'Gardens & Museums', 'description' => 'Shalimar Gardens, Lahore Museum, Anarkali Bazaar, evening Wagah Border ceremony'],
+                    ['day' => 3, 'title' => 'Modern Lahore & Departure', 'description' => 'Liberty Market, MM Alam Road cafés, Souvenir shopping, depart for home']
+                ],
+                'gallery' => [
+                    '/images/gallery/lahore-1.jpg',
+                    '/images/gallery/lahore-2.jpg',
+                    '/images/gallery/lahore-3.jpg',
+                    '/images/gallery/lahore-4.jpg',
                 ]
             ],
             'coastal-pakistan-escape' => [
@@ -327,27 +423,55 @@ class SiteController extends Controller
                 'price' => 599,
                 'type' => 'domestic',
                 'location' => 'Karachi, Gwadar, Ormara',
-                'overview' => 'Explore the stunning coastline of Pakistan from Karachi to Gwadar. Pristine beaches, fresh seafood, and unique coastal culture await you.',
+                'overview' => 'Follow the Makran Coastal Highway to pristine beaches, dramatic cliffs, and starry skies. A laid-back journey across Pakistan’s south coast.',
                 'highlights' => [
-                    'Visit Hawks Bay and Sandspit Beach',
-                    'Explore Gwadar Port and beaches',
-                    'Ormara Turtle Beach experience',
-                    'Fresh seafood dining',
-                    'Coastal highway scenic drive',
-                    'Hingol National Park visit'
+                    'Sunset at Ormara Hammerhead',
+                    'Kund Malir Beach & Princess of Hope',
+                    'Gwadar port city viewpoints',
+                    'Hingol National Park landscapes',
+                    'Karachi heritage & food tour'
                 ],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Karachi Coastal Tour', 'description' => 'Hawks Bay, Sandspit Beach, Manora Island, evening at Do Darya'],
-                    ['day' => 2, 'title' => 'Karachi to Ormara', 'description' => 'Scenic coastal drive, stop at Hingol National Park, Princess of Hope rock'],
-                    ['day' => 3, 'title' => 'Ormara Beach Day', 'description' => 'Turtle Beach, swimming, beach activities, fresh seafood lunch'],
-                    ['day' => 4, 'title' => 'Ormara to Gwadar', 'description' => 'Coastal highway drive, Gwadar Port visit, sunset at Gwadar beach'],
-                    ['day' => 5, 'title' => 'Gwadar & Return', 'description' => 'Hammerhead viewpoint, Gwadar city tour, return to Karachi']
+                    ['day' => 1, 'title' => 'Karachi Arrival & City Flavor', 'description' => 'Check-in, Clifton & Seaview drive, Burns Road food trail'],
+                    ['day' => 2, 'title' => 'Karachi to Ormara', 'description' => 'Drive via Makran Coastal Highway, Kund Malir & Princess of Hope, sunset at Ormara'],
+                    ['day' => 3, 'title' => 'Ormara to Gwadar', 'description' => 'Hammerhead viewpoint, Hingol National Park photo stops, arrive Gwadar'],
+                    ['day' => 4, 'title' => 'Explore Gwadar', 'description' => 'Gwadar Port view point, Koh-e-Batil, beaches, seafood dinner'],
+                    ['day' => 5, 'title' => 'Return to Karachi', 'description' => 'Coastal drive back with scenic stops, drop-off in Karachi']
                 ],
                 'gallery' => [
-                    '/images/tours/coast-1.jpg',
-                    '/images/tours/coast-2.jpg',
-                    '/images/tours/coast-3.jpg',
-                    '/images/tours/coast-4.jpg',
+                    '/images/gallery/coast-1.jpg',
+                    '/images/gallery/coast-2.jpg',
+                    '/images/gallery/coast-3.jpg',
+                    '/images/gallery/coast-4.jpg',
+                ]
+            ],
+            'swat-valley-discovery' => [
+                'title' => 'Swat Valley Discovery',
+                'slug' => 'swat-valley-discovery',
+                'image' => '/images/tours/swat.jpg',
+                'duration' => '4 Days / 3 Nights',
+                'price' => 499,
+                'type' => 'domestic',
+                'location' => 'Swat, Kalam, Mahodand',
+                'overview' => 'Lush valleys, rivers, and alpine lakes. Discover Swat’s beauty from Mingora to Kalam, with an unforgettable trip to Mahodand Lake (seasonal access).',
+                'highlights' => [
+                    'Malam Jabba chairlift (seasonal)',
+                    'Kalam Bazaar and Ushu Forest',
+                    'Mahodand Lake jeep excursion',
+                    'Swat Museum & Mingora riverfront',
+                    'Local trout dinner experience'
+                ],
+                'itinerary' => [
+                    ['day' => 1, 'title' => 'Islamabad to Swat (Mingora)', 'description' => 'Drive to Swat, check-in, river walk and local dinner'],
+                    ['day' => 2, 'title' => 'Malam Jabba & Mingora', 'description' => 'Malam Jabba chairlift/zipline (seasonal), Swat Museum, evening café by the river'],
+                    ['day' => 3, 'title' => 'Kalam & Ushu Forest', 'description' => 'Transfer to Kalam, explore Ushu Forest, trout lunch, bazaar stroll'],
+                    ['day' => 4, 'title' => 'Mahodand Lake & Return', 'description' => 'Jeep to Mahodand Lake (weather permitting), drive back towards Islamabad after noon']
+                ],
+                'gallery' => [
+                    '/images/gallery/swat-1.jpg',
+                    '/images/gallery/swat-2.jpg',
+                    '/images/gallery/swat-3.jpg',
+                    '/images/gallery/swat-4.jpg',
                 ]
             ],
         ];
@@ -357,6 +481,7 @@ class SiteController extends Controller
 
         return view('tours.show', compact('tour'));
     }
+
 
     /**
      * Display contact page with company information

@@ -90,8 +90,10 @@
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
                         <div class="grid grid-cols-2 gap-4">
                             @foreach($tour['gallery'] as $index => $image)
-                                <div class="relative h-48 rounded-lg overflow-hidden bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }}">
-                                    {{-- Placeholder gradient images --}}
+                                <div class="relative h-48 rounded-lg overflow-hidden">
+                                    <img src="{{ $image }}" alt="{{ $tour['title'] }} Gallery Image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                    {{-- Fallback gradient if image doesn't load --}}
+                                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
                                 </div>
                             @endforeach
                         </div>
