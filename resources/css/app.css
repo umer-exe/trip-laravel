@@ -1,0 +1,33 @@
+/* Import Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Custom styles for Atlas Tours */
+:root {
+    --bs-primary: #4f46e5;
+    --bs-primary-rgb: 79, 70, 229;
+}
+
+.bg-primary-gradient {
+    background: linear-gradient(to right, #4f46e5, #7c3aed);
+}
+
+.hero-section {
+    background: linear-gradient(to right, #4f46e5, #7c3aed);
+    position: relative;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+}
+
+.tour-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tour-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
