@@ -51,8 +51,10 @@
             </div>
         </div>
 
-        <a href="{{ route('tours.show', $tour['slug']) }}" class="block w-full bg-indigo-600 text-white text-center py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
-            View Details
-        </a>
+        <div class="space-y-2">
+            <a href="{{ route('tours.show', $tour['slug']) }}" class="block w-full bg-indigo-600 text-white text-center py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
+                View Details
+            </a>
+        </div>
     </div>
 </div>

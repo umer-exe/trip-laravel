@@ -27,6 +27,22 @@
                 <a href="{{ route('contact') }}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition {{ request()->routeIs('contact') ? 'text-indigo-600 border-b-2 border-indigo-600' : '' }}">
                     Contact
                 </a>
+                
+                {{-- Cart Link with Count --}}
+                <a href="{{ route('shoppingcart.index') }}" class="relative text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition {{ request()->routeIs('shoppingcart.*') ? 'text-indigo-600 border-b-2 border-indigo-600' : '' }}">
+                    <svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                    </svg>
+                    Cart
+                    @php
+                        $cartCount = collect(session('cart', []))->sum('quantity');
+                    @endphp
+                    @if($cartCount > 0)
+                        <span class="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
+                </a>
             </div>
 
             {{-- Mobile menu button --}}
@@ -49,6 +65,19 @@
             </a>
             <a href="{{ route('contact') }}" class="block text-gray-700 hover:text-indigo-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('contact') ? 'text-indigo-600 bg-indigo-50' : '' }}">
                 Contact
+            </a>
+            <a href="{{ route('shoppingcart.index') }}" class="block text-gray-700 hover:text-indigo-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('shoppingcart.*') ? 'text-indigo-600 bg-indigo-50' : '' }}">
+                <div class="flex items-center justify-between">
+                    <span>Cart</span>
+                    @php
+                        $cartCount = collect(session('cart', []))->sum('quantity');
+                    @endphp
+                    @if($cartCount > 0)
+                        <span class="bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
+                </div>
             </a>
         </div>
     </nav>

@@ -24,7 +24,7 @@
             </div>
 
             <div class="text-center mt-10">
-                <a href="{{ route('tours.index') }}" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition font-semibold">
+                <a href="{{ route('tours.index') }}" class="inline-flex items-center px-8 py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-sm transition">
                     View All Tours
                 </a>
             </div>

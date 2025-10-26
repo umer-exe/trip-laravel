@@ -4,37 +4,34 @@
 @section('content')
 
     {{-- Tour Hero Image --}}
-    <section class="relative h-96 bg-gray-900">
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600"></div>
-        <div class="absolute inset-0 bg-black opacity-40"></div>
-        <div class="relative h-full flex items-end">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
-                <div class="flex items-center mb-4">
-                <span class="px-3 py-1 rounded-full text-sm font-semibold {{ $tour['type'] === 'international' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }}">
+    <section class="relative bg-gradient-to-r from-indigo-600 to-purple-600">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex items-center mb-3">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $tour['type'] === 'international' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }}">
                     {{ ucfirst($tour['type']) }} Tour
                 </span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ $tour['title'] }}</h1>
+            <div class="flex flex-wrap gap-4 text-white">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">{{ $tour['location'] }}</span>
                 </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ $tour['title'] }}</h1>
-                <div class="flex flex-wrap gap-6 text-white">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <span>{{ $tour['location'] }}</span>
-                    </div>
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>{{ $tour['duration'] }}</span>
-                    </div>
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-2xl font-bold">${{ number_format($tour['price']) }}</span>
-                    </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">{{ $tour['duration'] }}</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-xl font-bold">${{ number_format($tour['price']) }}</span>
                 </div>
             </div>
         </div>
@@ -52,19 +49,18 @@
                         <p class="text-gray-700 leading-relaxed">{{ $tour['overview'] }}</p>
                     </div>
 
-                    {{-- Highlights --}}
+                    {{-- Photo Gallery (moved up) --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Tour Highlights</h2>
-                        <ul class="space-y-3">
-                            @foreach($tour['highlights'] as $highlight)
-                                <li class="flex items-start">
-                                    <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span class="text-gray-700">{{ $highlight }}</span>
-                                </li>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            @foreach($tour['gallery'] as $index => $image)
+                                <div class="relative h-48 rounded-lg overflow-hidden">
+                                    <img src="{{ $image }}" alt="{{ $tour['title'] }} Gallery Image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                    {{-- Fallback gradient if image doesn't load --}}
+                                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
+                                </div>
                             @endforeach
-                        </ul>
+                        </div>
                     </div>
 
                     {{-- Itinerary --}}
@@ -85,18 +81,19 @@
                         </div>
                     </div>
 
-                    {{-- Gallery --}}
+                    {{-- Highlights (moved down) --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            @foreach($tour['gallery'] as $index => $image)
-                                <div class="relative h-48 rounded-lg overflow-hidden">
-                                    <img src="{{ $image }}" alt="{{ $tour['title'] }} Gallery Image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
-                                    {{-- Fallback gradient if image doesn't load --}}
-                                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
-                                </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Tour Highlights</h2>
+                        <ul class="space-y-3">
+                            @foreach($tour['highlights'] as $highlight)
+                                <li class="flex items-start">
+                                    <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="text-gray-700">{{ $highlight }}</span>
+                                </li>
                             @endforeach
-                        </div>
+                        </ul>
                     </div>
                 </div>
 
@@ -110,44 +107,42 @@
                             <p class="text-gray-500 text-sm">per person</p>
                         </div>
 
-                        <form action="#" method="POST" class="space-y-4">
+                        {{-- Add to Cart Form --}}
+                        <form action="{{ route('cart.add') }}" method="POST" class="space-y-4">
+                            @csrf
+                            <input type="hidden" name="tour_id" value="{{ $tour['id'] }}">
+                            
+                            {{-- Date Selection --}}
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <input type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="John Doe">
+                                <label class="text-sm font-medium text-gray-700 mb-2">Select Departure Date</label>
+                                <select name="selected_date" required class="w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="">Choose your preferred date</option>
+                                    @if(isset($tour['available_dates']))
+                                        @foreach(array_slice($tour['available_dates'], 0, 3) as $date => $label)
+                                            <option value="{{ $date }}" {{ old('selected_date') == $date ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                @error('selected_date')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Number of Travelers</label>
+                                <input type="number" name="quantity" min="1" max="12" value="1" class="w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" />
                             </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <input type="email" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="john@example.com">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                                <input type="tel" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="+92 300 1234567">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Number of Travelers</label>
-                                <input type="number" min="1" value="1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                                <input type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Message (Optional)</label>
-                                <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Any special requests?"></textarea>
-                            </div>
-
-                            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
-                                Send Enquiry
+                            <!-- Primary Button -->
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md py-2.5 transition">
+                                Add to Cart
                             </button>
                         </form>
 
                         <p class="text-xs text-gray-500 text-center mt-4">
-                            Form submission will be functional in Phase 2
+                            Add tours to cart to complete your booking
                         </p>
 
                         <div class="mt-6 pt-6 border-t">

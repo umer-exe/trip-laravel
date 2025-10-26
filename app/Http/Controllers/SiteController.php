@@ -138,8 +138,6 @@ class SiteController extends Controller
                 'type' => 'international',
                 'location' => 'Phuket, Bangkok, Krabi',
                 'month' => 'February'
-
-
             ],
             [
                 'id' => 5,
@@ -173,7 +171,6 @@ class SiteController extends Controller
                 'type' => 'domestic',
                 'location' => 'Karachi, Gwadar, Ormara',
                 'month' => 'November'
-
             ],
             [
                 'id' => 8,
@@ -214,6 +211,7 @@ class SiteController extends Controller
         // Mock detailed tour data with itineraries
         $tours = [
             'discover-japan' => [
+                'id' => 1,
                 'title' => 'Discover Japan',
                 'slug' => 'discover-japan',
                 'image' => '/images/tours/japan.jpg',
@@ -221,6 +219,12 @@ class SiteController extends Controller
                 'price' => 2499,
                 'type' => 'international',
                 'location' => 'Tokyo, Kyoto, Osaka',
+                'available_dates' => [
+                    '2024-03-15' => 'March 15, 2024',
+                    '2024-04-10' => 'April 10, 2024',
+                    '2024-05-05' => 'May 5, 2024',
+                    '2024-06-20' => 'June 20, 2024',
+                ],
                 'overview' => 'Experience the perfect blend of ancient traditions and modern innovation in Japan. This comprehensive tour takes you through bustling Tokyo, historic Kyoto, and vibrant Osaka.',
                 'highlights' => [
                     'Visit iconic Tokyo Tower and Shibuya Crossing',
@@ -250,6 +254,7 @@ class SiteController extends Controller
                 ]
             ],
             'northern-pakistan' => [
+                'id' => 2,
                 'title' => 'Northern Pakistan',
                 'slug' => 'northern-pakistan',
                 'image' => '/images/tours/pakistan.jpg',
@@ -257,6 +262,12 @@ class SiteController extends Controller
                 'price' => 899,
                 'type' => 'domestic',
                 'location' => 'Hunza, Skardu, Fairy Meadows',
+                'available_dates' => [
+                    '2024-06-01' => 'June 1, 2024',
+                    '2024-07-15' => 'July 15, 2024',
+                    '2024-08-10' => 'August 10, 2024',
+                    '2024-09-05' => 'September 5, 2024',
+                ],
                 'overview' => 'Embark on an unforgettable journey through the majestic mountains of Northern Pakistan. Experience breathtaking landscapes, warm hospitality, and adventure of a lifetime.',
                 'highlights' => [
                     'Visit Hunza Valley and Baltit Fort',
@@ -283,6 +294,7 @@ class SiteController extends Controller
                 ]
             ],
             'european-highlights' => [
+                'id' => 3,
                 'title' => 'European Highlights',
                 'slug' => 'european-highlights',
                 'image' => '/images/tours/europe.jpg',
@@ -290,6 +302,12 @@ class SiteController extends Controller
                 'price' => 3299,
                 'type' => 'international',
                 'location' => 'Paris, Rome, Barcelona',
+                'available_dates' => [
+                    '2024-05-01' => 'May 1, 2024',
+                    '2024-06-15' => 'June 15, 2024',
+                    '2024-07-20' => 'July 20, 2024',
+                    '2024-08-25' => 'August 25, 2024',
+                ],
                 'overview' => 'Discover the best of Europe in this comprehensive tour covering three iconic cities. Experience world-class art, architecture, cuisine, and culture.',
                 'highlights' => [
                     'Eiffel Tower and Louvre Museum in Paris',
@@ -323,6 +341,7 @@ class SiteController extends Controller
                 ]
             ],
             'thailand-beach-paradise' => [
+                'id' => 4,
                 'title' => 'Thailand Paradise',
                 'slug' => 'thailand-beach-paradise',
                 'image' => '/images/tours/thailand.jpg',
@@ -330,7 +349,13 @@ class SiteController extends Controller
                 'price' => 1799,
                 'type' => 'international',
                 'location' => 'Phuket, Bangkok, Krabi',
-                'overview' => 'Sun-kissed beaches, emerald waters, and buzzing city life. From Bangkok’s temples and markets to Phuket’s island-hopping and Krabi’s limestone cliffs, this is Thailand at its best.',
+                'available_dates' => [
+                    '2024-02-10' => 'February 10, 2024',
+                    '2024-03-25' => 'March 25, 2024',
+                    '2024-04-15' => 'April 15, 2024',
+                    '2024-05-30' => 'May 30, 2024',
+                ],
+                'overview' => 'Sun-kissed beaches, emerald waters, and buzzing city life. From Bangkok\'s temples and markets to Phuket\'s island-hopping and Krabi\'s limestone cliffs, this is Thailand at its best.',
                 'highlights' => [
                     'Grand Palace and Wat Pho in Bangkok',
                     'Floating market experience',
@@ -357,6 +382,7 @@ class SiteController extends Controller
                 ]
             ],
             'dubai-extravaganza' => [
+                'id' => 5,
                 'title' => 'Dubai Extravaganza',
                 'slug' => 'dubai-extravaganza',
                 'image' => '/images/tours/dubai.jpg',
@@ -364,7 +390,13 @@ class SiteController extends Controller
                 'price' => 1299,
                 'type' => 'international',
                 'location' => 'Dubai, Abu Dhabi',
-                'overview' => 'A showcase of futuristic architecture, desert adventures, and luxury shopping. Discover Dubai’s glittering skyline and the cultural gems of Abu Dhabi.',
+                'available_dates' => [
+                    '2024-12-01' => 'December 1, 2024',
+                    '2024-12-15' => 'December 15, 2024',
+                    '2025-01-10' => 'January 10, 2025',
+                    '2025-02-05' => 'February 5, 2025',
+                ],
+                'overview' => 'A showcase of futuristic architecture, desert adventures, and luxury shopping. Discover Dubai\'s glittering skyline and the cultural gems of Abu Dhabi.',
                 'highlights' => [
                     'Burj Khalifa At The Top (non-peak)',
                     'Dubai Marina & Palm Jumeirah photo stops',
@@ -388,6 +420,7 @@ class SiteController extends Controller
                 ]
             ],
             'lahore-heritage-tour' => [
+                'id' => 6,
                 'title' => 'Lahore Heritage Tour',
                 'slug' => 'lahore-heritage-tour',
                 'image' => '/images/tours/lahore.jpg',
@@ -395,6 +428,12 @@ class SiteController extends Controller
                 'price' => 399,
                 'type' => 'domestic',
                 'location' => 'Lahore',
+                'available_dates' => [
+                    '2024-03-01' => 'March 1, 2024',
+                    '2024-03-20' => 'March 20, 2024',
+                    '2024-04-10' => 'April 10, 2024',
+                    '2024-05-01' => 'May 1, 2024',
+                ],
                 'overview' => 'Dive into the cultural capital of Pakistan. Mughal-era monuments, rich cuisine, and vibrant bazaars make Lahore unforgettable.',
                 'highlights' => [
                     'Badshahi Mosque and Lahore Fort (Shahi Qila)',
@@ -416,6 +455,7 @@ class SiteController extends Controller
                 ]
             ],
             'coastal-pakistan-escape' => [
+                'id' => 7,
                 'title' => 'Coastal Pakistan Escape',
                 'slug' => 'coastal-pakistan-escape',
                 'image' => '/images/tours/coast.jpg',
@@ -423,7 +463,13 @@ class SiteController extends Controller
                 'price' => 599,
                 'type' => 'domestic',
                 'location' => 'Karachi, Gwadar, Ormara',
-                'overview' => 'Follow the Makran Coastal Highway to pristine beaches, dramatic cliffs, and starry skies. A laid-back journey across Pakistan’s south coast.',
+                'available_dates' => [
+                    '2024-11-01' => 'November 1, 2024',
+                    '2024-11-20' => 'November 20, 2024',
+                    '2024-12-10' => 'December 10, 2024',
+                    '2025-01-05' => 'January 5, 2025',
+                ],
+                'overview' => 'Follow the Makran Coastal Highway to pristine beaches, dramatic cliffs, and starry skies. A laid-back journey across Pakistan\'s south coast.',
                 'highlights' => [
                     'Sunset at Ormara Hammerhead',
                     'Kund Malir Beach & Princess of Hope',
@@ -446,6 +492,7 @@ class SiteController extends Controller
                 ]
             ],
             'swat-valley-discovery' => [
+                'id' => 8,
                 'title' => 'Swat Valley Discovery',
                 'slug' => 'swat-valley-discovery',
                 'image' => '/images/tours/swat.jpg',
@@ -453,7 +500,13 @@ class SiteController extends Controller
                 'price' => 499,
                 'type' => 'domestic',
                 'location' => 'Swat, Kalam, Mahodand',
-                'overview' => 'Lush valleys, rivers, and alpine lakes. Discover Swat’s beauty from Mingora to Kalam, with an unforgettable trip to Mahodand Lake (seasonal access).',
+                'available_dates' => [
+                    '2024-07-01' => 'July 1, 2024',
+                    '2024-07-20' => 'July 20, 2024',
+                    '2024-08-10' => 'August 10, 2024',
+                    '2024-08-30' => 'August 30, 2024',
+                ],
+                'overview' => 'Lush valleys, rivers, and alpine lakes. Discover Swat\'s beauty from Mingora to Kalam, with an unforgettable trip to Mahodand Lake (seasonal access).',
                 'highlights' => [
                     'Malam Jabba chairlift (seasonal)',
                     'Kalam Bazaar and Ushu Forest',
