@@ -43,6 +43,12 @@
                         </span>
                     @endif
                 </a>
+
+                @auth
+                    <a href="{{ route('admin.tours.index') }}" class="text-indigo-600 hover:text-indigo-800 px-3 py-2 text-sm font-medium flex items-center">
+                        <span>→ Return to Admin Panel</span>
+                    </a>
+                @endauth
             </div>
 
             {{-- Mobile menu button --}}

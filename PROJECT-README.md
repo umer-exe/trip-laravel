@@ -106,3 +106,132 @@ GET  /shopping-cart/success     # Order confirmation
 
 ---
 
+
+---
+
+
+# Atlas Tours & Travel – Complete Booking System  
+**Phase 2 – Dynamic + Admin Panel + Auth Enabled**
+
+A **fully dynamic travel booking platform** built with **Laravel 12**, **Tailwind CSS**, and **SQLite/MySQL** – featuring:
+
+✔ Database-driven tours  
+✔ Admin dashboard with CRUD  
+✔ Secure authentication  
+✔ Shopping cart + checkout flow  
+✔ Slug auto-generation  
+✔ Separate admin & public UI layouts  
+
+---
+
+## 🚀 What’s New in Phase 2?
+
+### ✔ Fully Dynamic Tours (From Database)
+- All tour data now loads from the **database**
+- Admin can manage tours from dashboard
+- No more hardcoded tours in controllers
+
+### ✔ Admin Panel – Full CRUD
+| Feature | Status |
+|--------|--------|
+| Create Tour | ✅ |
+| Edit Tour | ✅ |
+| Delete Tour | ✅ |
+| Auto Slug | ✅ |
+| Featured Tours Toggle | ✅ |
+| Dynamic Images | 🔜 (Phase 3) |
+
+### ✔ Secure Authentication (Laravel Breeze)
+- `/login` → Admin login page  
+- Public users never see admin buttons  
+- Admin toolbar added on admin pages  
+- Logged-in admins see **“Return to Admin Panel →”** on frontend  
+
+---
+
+## 🧠 Admin Navigation Flow
+
+| Scenario | Expected Behavior |
+|---------|-------------------|
+| Visiting `/admin/tours` while logged out | Redirects to `/login` |
+| Successful login | Redirects to `/admin/tours` |
+| Visiting `/login` while already logged in | Redirects to `/admin/tours` |
+| Public pages when logged in | Sees button → **Return to Admin Panel** |
+| Logout | Redirects user to homepage `/` |
+
+---
+
+## 🗂 Updated Project Structure
+
+├── app/Http/Controllers/
+│ ├── SiteController.php # Frontend views
+│ ├── ShoppingCartController.php # Cart + checkout
+│ └── Admin/TourController.php # CRUD logic (admin)
+│
+├── database/migrations/ # Tour table schema
+├── database/seeders/TourSeeder.php # Demo tours (8 entries)
+│
+├── resources/views/
+│ ├── layouts/
+│ │ ├── app.blade.php # Public layout
+│ │ └── admin.blade.php # NEW Admin layout
+│ ├── partials/ # Navbar, footer, tour-card
+│ ├── home.blade.php # Homepage with featured tours
+│ ├── admin/tours/ # CRUD views
+│ ├── tours/ # Frontend tour pages
+│ ├── shoppingcart/ # Cart + checkout
+│ └── contact.blade.php
+│
+├── routes/web.php # Public + admin routes
+├── public/images/tours/ # Thumbnails
+├── public/images/gallery/ # Gallery images
+
+pgsql
+Copy code
+
+---
+
+## 🧾 Example Tour Data (Stored in DB)
+
+| Field | Example |
+|------|---------|
+| title | “Swiss Alps Adventure” |
+| slug | `swiss-alps-adventure` |
+| type | `international` |
+| price | 1700 |
+| thumbnail_image | `images/tours/swiss.jpg` |
+| highlights | JSON array |
+| itinerary | JSON array |
+| gallery_images | JSON array (Phase 3) |
+
+---
+
+## 📦 Routes (Latest)
+
+```php
+// Public Routes
+GET  /                         # Home
+GET  /tours                    # All tours
+GET  /tours/{slug}             # Tour details
+GET  /contact                  # Contact page
+
+// Cart Routes
+POST /cart/add
+POST /cart/update
+POST /cart/remove
+POST /cart/clear
+GET  /shopping-cart
+POST /shopping-cart/process
+GET  /shopping-cart/success
+
+// Admin Routes (Protected by Middleware)
+GET    /admin/tours
+GET    /admin/tours/create
+POST   /admin/tours
+GET    /admin/tours/{id}/edit
+PUT    /admin/tours/{id}
+DELETE /admin/tours/{id}
+
+// AUTH (Laravel Breeze)
+GET  /login
+POST /logout

@@ -17,11 +17,18 @@
                 <p class="text-lg text-gray-600">Handpicked adventures for unforgettable experiences</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($featuredTours as $tour)
-                    @include('partials.tour-card', ['tour' => $tour])
-                @endforeach
-            </div>
+            @if($featuredTours->count())
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($featuredTours as $tour)
+                        @include('partials.tour-card', ['tour' => $tour])
+                    @endforeach
+                </div>
+            @else
+                <div class="bg-white border border-dashed border-indigo-200 rounded-xl p-6 text-center text-gray-600">
+                    <p class="font-semibold text-lg mb-2">No featured tours yet</p>
+                    <p class="text-sm">Add a tour from the admin panel and mark it as featured to highlight it here.</p>
+                </div>
+            @endif
 
             <div class="text-center mt-10">
                 <a href="{{ route('tours.index') }}" class="inline-flex items-center px-8 py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-sm transition">
@@ -35,7 +42,7 @@
     @include('partials.top-destinations')
 
     {{-- Testimonials Section --}}
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-white overflow-hidden relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Our Travelers Say</h2>

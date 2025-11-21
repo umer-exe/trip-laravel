@@ -165,34 +165,41 @@
                         {{-- Cart Items with Quantity Controls --}}
                         <div class="space-y-4 mb-6">
                             @foreach($cartItems as $item)
+                                @php
+                                    $imageUrl = isset($item['image']) ? asset($item['image']) : 'https://placehold.co/160x120?text=Tour';
+                                @endphp
                                 <div class="border border-gray-200 rounded-lg p-4">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="flex-1">
-                                            <h4 class="font-medium text-gray-900">{{ $item['title'] }}</h4>
-                                            <p class="text-sm text-gray-600">{{ $item['duration'] }}</p>
-                                            @if(isset($item['selected_date_label']))
-                                                <p class="text-sm text-indigo-600 font-medium">Departure: {{ $item['selected_date_label'] }}</p>
-                                            @endif
+                                    <div class="flex items-start gap-4 mb-4">
+                                        <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                            <img src="{{ $imageUrl }}" alt="{{ $item['title'] }}" class="w-full h-full object-cover">
                                         </div>
-                                        {{-- Separate form for delete button - outside main checkout form --}}
-                                        <form action="{{ route('cart.remove') }}" method="POST" class="inline">
-                                            @csrf
-                                            <input type="hidden" name="tour_id" value="{{ $item['id'] }}">
-                                            @if(isset($item['selected_date']))
-                                                <input type="hidden" name="selected_date" value="{{ $item['selected_date'] }}">
-                                            @endif
-                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm p-1 rounded hover:bg-red-50 transition" title="Remove tour">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900">{{ $item['title'] }}</h4>
+                                                    <p class="text-sm text-gray-600">{{ $item['duration'] }}</p>
+                                                    @if(isset($item['selected_date_label']))
+                                                        <p class="text-sm text-indigo-600 font-medium">Departure: {{ $item['selected_date_label'] }}</p>
+                                                    @endif
+                                                </div>
+                                                <form action="{{ route('cart.remove') }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <input type="hidden" name="tour_id" value="{{ $item['id'] }}">
+                                                    @if(isset($item['selected_date']))
+                                                        <input type="hidden" name="selected_date" value="{{ $item['selected_date'] }}">
+                                                    @endif
+                                                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm p-1 rounded hover:bg-red-50 transition" title="Remove tour">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                    
-                                    {{-- Quantity Controls --}}
+
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-2">
-                                            {{-- Separate form for quantity decrease --}}
                                             <form action="{{ route('cart.update') }}" method="POST" class="inline">
                                                 @csrf
                                                 <input type="hidden" name="tour_id" value="{{ $item['id'] }}">
@@ -200,17 +207,15 @@
                                                     <input type="hidden" name="selected_date" value="{{ $item['selected_date'] }}">
                                                 @endif
                                                 <input type="hidden" name="quantity" value="{{ max(1, $item['quantity'] - 1) }}">
-                                                <button type="submit" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50" 
-                                                        {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
+                                                <button type="submit" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50" {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                                                     </svg>
                                                 </button>
                                             </form>
-                                            
+
                                             <span class="w-6 text-center font-medium">{{ $item['quantity'] }}</span>
-                                            
-                                            {{-- Separate form for quantity increase --}}
+
                                             <form action="{{ route('cart.update') }}" method="POST" class="inline">
                                                 @csrf
                                                 <input type="hidden" name="tour_id" value="{{ $item['id'] }}">
@@ -218,15 +223,14 @@
                                                     <input type="hidden" name="selected_date" value="{{ $item['selected_date'] }}">
                                                 @endif
                                                 <input type="hidden" name="quantity" value="{{ min(20, $item['quantity'] + 1) }}">
-                                                <button type="submit" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50"
-                                                        {{ $item['quantity'] >= 20 ? 'disabled' : '' }}>
+                                                <button type="submit" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50" {{ $item['quantity'] >= 20 ? 'disabled' : '' }}>
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                                     </svg>
                                                 </button>
                                             </form>
                                         </div>
-                                        
+
                                         <div class="text-right">
                                             <div class="font-semibold text-gray-900">${{ number_format($item['price'] * $item['quantity']) }}</div>
                                             <div class="text-xs text-gray-500">${{ number_format($item['price']) }} each</div>

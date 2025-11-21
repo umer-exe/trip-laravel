@@ -64,9 +64,12 @@
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Tour Details</h3>
                     <div class="space-y-4">
                         @foreach($order['items'] as $item)
+                            @php
+                                $imageUrl = isset($item['image']) ? asset($item['image']) : 'https://placehold.co/160x120?text=Tour';
+                            @endphp
                             <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
                                 <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
-                                    <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" class="w-full h-full object-cover">
+                                    <img src="{{ $imageUrl }}" alt="{{ $item['title'] }}" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1">
                                     <h4 class="font-semibold text-gray-900">{{ $item['title'] }}</h4>

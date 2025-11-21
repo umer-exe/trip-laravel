@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,5 +40,26 @@ Route::get('/shopping-cart', [ShoppingCartController::class, 'index'])->name('sh
 Route::post('/shopping-cart/process', [ShoppingCartController::class, 'store'])->name('shoppingcart.store');
 Route::get('/shopping-cart/success', [ShoppingCartController::class, 'success'])->name('shoppingcart.success');
 
+// // TEMP: create a test user (REMOVE this route after using once)
+// Route::get('/make-user', function () {
+//     $user = User::firstOrCreate(
+//         ['email' => ''],
+//         [
+//             'name' => '',
+//             'password' => Hash::make(),
+//         ]
+//     );
+
+//     return 'User created: ' . $user->email;
+// });
+
+// Admin tour management (protected by Breeze auth)
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('tours', AdminTourController::class)->except(['show']);
+    });
+
 // Keep Breeze authentication routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

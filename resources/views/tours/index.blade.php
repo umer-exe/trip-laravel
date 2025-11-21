@@ -28,13 +28,13 @@
             {{-- Results Count --}}
             <div class="mb-6">
                 <p class="text-gray-600">
-                    Showing <span class="font-semibold">{{ count($tours) }}</span>
+                    Showing <span class="font-semibold">{{ $tours->count() }}</span>
                     {{ $filterType === 'all' ? '' : $filterType }}
-                    {{ count($tours) === 1 ? 'tour' : 'tours' }}
+                    {{ $tours->count() === 1 ? 'tour' : 'tours' }}
                 </p>
             </div>
 
-            @if(count($tours) > 0)
+            @if($tours->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($tours as $tour)
                         @include('partials.tour-card', ['tour' => $tour])

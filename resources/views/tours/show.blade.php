@@ -2,36 +2,48 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $galleryImages = $tour->gallery_images ?? [];
+    $availableDates = $tour->available_dates ?? [];
+    $heroImage = $tour->banner_image ?? $tour->thumbnail_image;
+@endphp
 
     {{-- Tour Hero Image --}}
-    <section class="relative bg-gradient-to-r from-indigo-600 to-purple-600">
-        <div class="absolute inset-0 bg-black opacity-20"></div>
+    <section class="relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white overflow-hidden">
+        @if($heroImage)
+            <div class="absolute inset-0">
+                <img src="{{ asset($heroImage) }}" alt="{{ $tour->title }} hero" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/80 to-purple-900/70"></div>
+            </div>
+        @else
+            <div class="absolute inset-0 bg-black opacity-20"></div>
+        @endif
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex items-center mb-3">
-                <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $tour['type'] === 'international' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }}">
-                    {{ ucfirst($tour['type']) }} Tour
+                <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $tour->type === 'international' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }}">
+                    {{ ucfirst($tour->type) }} Tour
                 </span>
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ $tour['title'] }}</h1>
-            <div class="flex flex-wrap gap-4 text-white">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ $tour->title }}</h1>
+            <div class="flex flex-wrap gap-4">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
-                    <span class="text-sm font-medium">{{ $tour['location'] }}</span>
+                    <span class="text-sm font-medium">{{ $tour->location }}</span>
                 </div>
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span class="text-sm font-medium">{{ $tour['duration'] }}</span>
+                    <span class="text-sm font-medium">{{ $tour->duration }}</span>
                 </div>
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span class="text-xl font-bold">${{ number_format($tour['price']) }}</span>
+                    <span class="text-xl font-bold">${{ number_format((float) $tour->price) }}</span>
                 </div>
             </div>
         </div>
@@ -46,33 +58,36 @@
                     {{-- Overview --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
-                        <p class="text-gray-700 leading-relaxed">{{ $tour['overview'] }}</p>
+                        <p class="text-gray-700 leading-relaxed">{{ $tour->overview }}</p>
                     </div>
 
-                    {{-- Photo Gallery (moved up) --}}
+                    {{-- Photo Gallery --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            @foreach($tour['gallery'] as $index => $image)
-                                <div class="relative h-48 rounded-lg overflow-hidden">
-                                    <img src="{{ $image }}" alt="{{ $tour['title'] }} Gallery Image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
-                                    {{-- Fallback gradient if image doesn't load --}}
-                                    <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
-                                </div>
-                            @endforeach
-                        </div>
+                        @if(count($galleryImages))
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach($galleryImages as $index => $image)
+                                    <div class="relative h-48 rounded-lg overflow-hidden">
+                                        <img src="{{ asset($image) }}" alt="{{ $tour->title }} gallery image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                        <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-500">Gallery coming soon.</p>
+                        @endif
                     </div>
 
                     {{-- Itinerary --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Detailed Itinerary</h2>
                         <div class="space-y-4">
-                            @foreach($tour['itinerary'] as $item)
+                            @foreach($tour->itinerary ?? [] as $item)
                                 <div class="border-l-4 border-indigo-600 pl-4 py-2">
                                     <div class="flex items-center mb-2">
-                                    <span class="bg-indigo-600 text-white text-sm font-bold px-3 py-1 rounded-full mr-3">
-                                        Day {{ $item['day'] }}
-                                    </span>
+                                        <span class="bg-indigo-600 text-white text-sm font-bold px-3 py-1 rounded-full mr-3">
+                                            Day {{ $item['day'] }}
+                                        </span>
                                         <h3 class="text-lg font-semibold text-gray-900">{{ $item['title'] }}</h3>
                                     </div>
                                     <p class="text-gray-600">{{ $item['description'] }}</p>
@@ -81,11 +96,11 @@
                         </div>
                     </div>
 
-                    {{-- Highlights (moved down) --}}
+                    {{-- Highlights --}}
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Tour Highlights</h2>
                         <ul class="space-y-3">
-                            @foreach($tour['highlights'] as $highlight)
+                            @foreach($tour->highlights ?? [] as $highlight)
                                 <li class="flex items-start">
                                     <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -99,43 +114,38 @@
 
                 {{-- Sidebar --}}
                 <div class="lg:col-span-1">
-                    {{-- Booking Card --}}
                     <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
                         <div class="text-center mb-6">
                             <p class="text-gray-600 text-sm mb-2">Starting from</p>
-                            <p class="text-4xl font-bold text-indigo-600">${{ number_format($tour['price']) }}</p>
+                            <p class="text-4xl font-bold text-indigo-600">${{ number_format((float) $tour->price) }}</p>
                             <p class="text-gray-500 text-sm">per person</p>
                         </div>
 
                         {{-- Add to Cart Form --}}
                         <form action="{{ route('cart.add') }}" method="POST" class="space-y-4">
                             @csrf
-                            <input type="hidden" name="tour_id" value="{{ $tour['id'] }}">
-                            
-                            {{-- Date Selection --}}
+                            <input type="hidden" name="tour_id" value="{{ $tour->id }}">
+
                             <div>
                                 <label class="text-sm font-medium text-gray-700 mb-2">Select Departure Date</label>
                                 <select name="selected_date" required class="w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">Choose your preferred date</option>
-                                    @if(isset($tour['available_dates']))
-                                        @foreach(array_slice($tour['available_dates'], 0, 3) as $date => $label)
-                                            <option value="{{ $date }}" {{ old('selected_date') == $date ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    @endif
+                                    @foreach($availableDates as $date => $label)
+                                        <option value="{{ $date }}" {{ old('selected_date') == $date ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('selected_date')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div>
                                 <label class="text-sm font-medium text-gray-700">Number of Travelers</label>
-                                <input type="number" name="quantity" min="1" max="12" value="1" class="w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" />
+                                <input type="number" name="quantity" min="1" max="12" value="1" class="w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
 
-                            <!-- Primary Button -->
                             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md py-2.5 transition">
                                 Add to Cart
                             </button>
