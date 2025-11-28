@@ -21,30 +21,12 @@ class SiteController extends Controller
             ->take(4)
             ->get();
 
-        // Mock testimonials data
-        $testimonials = [
-            [
-                'name' => 'Umer Malik',
-                'location' => 'Karachi, Pakistan',
-                'rating' => 5,
-                'comment' => 'Atlas Tours made our Japan trip unforgettable! Every detail was perfectly planned.',
-                'image' => '/images/testimonials/avatar1.jpg'
-            ],
-            [
-                'name' => 'John Smith',
-                'location' => 'London, UK',
-                'rating' => 5,
-                'comment' => 'Professional service and amazing tour guides. Highly recommended for Pakistan tours!',
-                'image' => '/images/testimonials/avatar2.jpg'
-            ],
-            [
-                'name' => 'Zain Niazi',
-                'location' => 'Lahore, Pakistan',
-                'rating' => 5,
-                'comment' => 'The Northern Pakistan tour was breathtaking. Thank you Atlas Tours!',
-                'image' => '/images/testimonials/avatar3.jpg'
-            ],
-        ];
+        // Get active reviews from database
+        $testimonials = \App\Models\Review::where('is_active', true)
+            ->orderByDesc('created_at')
+            ->take(3)
+            ->get()
+            ->toArray();
 
         return view('home', compact('featuredTours', 'testimonials'));
     }
@@ -59,14 +41,33 @@ class SiteController extends Controller
     {
         $filterType = $request->get('type', 'all');
         $toursQuery = Tour::query()
-            ->where('status', 'active')
-            ->orderBy('title');
+            ->where('status', 'active');
 
+        // Apply type filter
         if ($filterType !== 'all') {
             $toursQuery->where('type', $filterType);
         }
 
-        $tours = $toursQuery->get();
+        // Apply destination search (search in title and location)
+        if ($request->filled('destination')) {
+            $search = $request->destination;
+            $toursQuery->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('location', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply min price filter
+        if ($request->filled('min_price')) {
+            $toursQuery->where('price', '>=', $request->min_price);
+        }
+
+        // Apply max price filter
+        if ($request->filled('max_price')) {
+            $toursQuery->where('price', '<=', $request->max_price);
+        }
+
+        $tours = $toursQuery->orderBy('created_at', 'desc')->get();
 
         return view('tours.index', compact('tours', 'filterType'));
     }
@@ -105,6 +106,34 @@ class SiteController extends Controller
         ];
 
         return view('contact', compact('contactInfo'));
+    }
+
+    /**
+     * Handle contact form submission
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function submitContact(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|min:10',
+        ]);
+
+        \App\Models\ContactMessage::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'subject' => $validated['subject'],
+            'message' => $validated['message'],
+            'status' => 'new',
+        ]);
+
+        return redirect()->route('contact')->with('success', 'Your message has been sent. We will get back to you soon.');
     }
 }
 

@@ -29,6 +29,9 @@ Route::get('/tours/{slug}', [SiteController::class, 'toursShow'])->name('tours.s
 // Contact page - displays contact information and enquiry form
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 
+// Contact form submission
+Route::post('/contact', [SiteController::class, 'submitContact'])->name('contact.submit');
+
 // Cart routes (for adding items)
 Route::post('/cart/add', [ShoppingCartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [ShoppingCartController::class, 'update'])->name('cart.update');
@@ -59,6 +62,10 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
         Route::resource('tours', AdminTourController::class)->except(['show']);
+        Route::resource('contact-messages', \App\Http\Controllers\Admin\ContactMessageController::class)
+            ->only(['index', 'show', 'edit', 'update', 'destroy']);
+        Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)
+            ->except(['show']);
     });
 
 // Keep Breeze authentication routes
