@@ -3,12 +3,32 @@
 
 @section('content')
 @php
+    /**
+     * Tour Detail Logic
+     * 
+     * Handles the display of tour images and handling differences between
+     * seeded data (located in public/images) and uploaded data (located in storage/app/public).
+     */
+
     $galleryImages = $tour->gallery_images ?? [];
     $availableDates = $tour->available_dates ?? [];
-    // Use featured_image if available, otherwise fallback to banner_image or thumbnail_image
-    $heroImage = $tour->featured_image 
-        ? 'storage/' . $tour->featured_image 
-        : ($tour->banner_image ?? $tour->thumbnail_image);
+    
+    /**
+     * Helper: Get Image Path
+     * 
+     * smart check to determine if an image path needs the 'storage/' prefix.
+     * - Seeded images start with 'images/' -> return as is
+     * - Uploaded images are just filenames/paths -> prepend 'storage/'
+     * - External URLs (http...) -> return as is
+     */
+    $getImagePath = function($path) {
+        if (!$path) return null;
+        return \Illuminate\Support\Str::startsWith($path, ['images/', 'http']) ? $path : 'storage/' . $path;
+    };
+
+    // Determine hero image source (Featured > Banner > Thumbnail)
+    $heroRawPath = $tour->featured_image ?? ($tour->banner_image ?? $tour->thumbnail_image);
+    $heroImage = $getImagePath($heroRawPath);
 @endphp
 
     {{-- Tour Hero Image --}}
@@ -71,7 +91,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 @foreach($galleryImages as $index => $image)
                                     <div class="relative h-48 rounded-lg overflow-hidden">
-                                        <img src="{{ asset($image) }}" alt="{{ $tour->title }} gallery image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                        <img src="{{ asset($getImagePath($image)) }}" alt="{{ $tour->title }} gallery image {{ $index + 1 }}" class="absolute inset-0 w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                                         <div class="absolute inset-0 bg-gradient-to-br {{ $index % 4 === 0 ? 'from-blue-400 to-indigo-500' : ($index % 4 === 1 ? 'from-green-400 to-teal-500' : ($index % 4 === 2 ? 'from-pink-400 to-purple-500' : 'from-yellow-400 to-orange-500')) }} -z-10"></div>
                                     </div>
                                 @endforeach
