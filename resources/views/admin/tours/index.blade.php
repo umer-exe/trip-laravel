@@ -36,7 +36,10 @@
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-4 py-3">
                                     @php
-                                        $thumb = $tour->thumbnail_image ? asset($tour->thumbnail_image) : 'https://placehold.co/80x64?text=Tour';
+                                        // Use featured_image if available, otherwise fallback to thumbnail_image
+                                        $thumb = $tour->featured_image 
+                                            ? asset('storage/' . $tour->featured_image)
+                                            : ($tour->thumbnail_image ? asset($tour->thumbnail_image) : 'https://placehold.co/80x64?text=Tour');
                                     @endphp
                                     <div class="w-16 h-12 rounded-md overflow-hidden bg-gray-100">
                                         <img src="{{ $thumb }}" alt="{{ $tour->title }} thumbnail" class="w-full h-full object-cover">

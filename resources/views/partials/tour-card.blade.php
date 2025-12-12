@@ -13,8 +13,15 @@
 @endphp
 
 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col h-full">
+    {{-- Tour Image --}}
+    @php
+        // Use featured_image if available, otherwise fallback to thumbnail_image
+        $tourImage = $tour->featured_image
+            ? asset('storage/' . $tour->featured_image)
+            : ($tour->thumbnail_image ? asset($tour->thumbnail_image) : 'https://placehold.co/400x300?text=Tour');
+    @endphp
     <div class="relative h-48 bg-gray-300 flex-shrink-0">
-        <img src="{{ $imageUrl }}" alt="{{ $title }}" class="absolute inset-0 w-full h-full object-cover">
+        <img src="{{ $tourImage }}" alt="{{ $title }}" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-500 -z-10"></div>
         <div class="absolute top-3 right-3">
             <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $type === 'international' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white' }}">

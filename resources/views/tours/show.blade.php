@@ -5,7 +5,10 @@
 @php
     $galleryImages = $tour->gallery_images ?? [];
     $availableDates = $tour->available_dates ?? [];
-    $heroImage = $tour->banner_image ?? $tour->thumbnail_image;
+    // Use featured_image if available, otherwise fallback to banner_image or thumbnail_image
+    $heroImage = $tour->featured_image 
+        ? 'storage/' . $tour->featured_image 
+        : ($tour->banner_image ?? $tour->thumbnail_image);
 @endphp
 
     {{-- Tour Hero Image --}}

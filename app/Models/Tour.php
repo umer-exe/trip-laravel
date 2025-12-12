@@ -21,6 +21,7 @@ class Tour extends Model
         'is_featured',
         'thumbnail_image',
         'banner_image',
+        'featured_image', // File upload field
         'gallery_images',
     ];
 

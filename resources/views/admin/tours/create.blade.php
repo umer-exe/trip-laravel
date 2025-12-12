@@ -9,7 +9,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <form action="{{ route('admin.tours.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('admin.tours.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @include('admin.tours.partials.form', ['submitLabel' => 'Create Tour'])
                 </form>

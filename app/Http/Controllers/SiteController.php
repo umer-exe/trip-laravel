@@ -135,5 +135,52 @@ class SiteController extends Controller
 
         return redirect()->route('contact')->with('success', 'Your message has been sent. We will get back to you soon.');
     }
+
+    /**
+     * AJAX search for tours - filters by destination and price
+     * Used for live search dropdown functionality
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchTours(Request $request)
+    {
+        // Get search parameters
+        $query = $request->get('q', '');
+        $minPrice = $request->get('min_price');
+        $maxPrice = $request->get('max_price');
+
+        // Return empty results if no search query
+        if (empty($query)) {
+            return response()->json([]);
+        }
+
+        // Build query to search active tours
+        $toursQuery = Tour::query()
+            ->where('status', 'active')
+            ->where(function ($q) use ($query) {
+                // Search in title and location fields
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('location', 'like', "%{$query}%");
+            });
+
+        // Apply price filters if provided
+        if ($minPrice !== null && $minPrice !== '') {
+            $toursQuery->where('price', '>=', $minPrice);
+        }
+
+        if ($maxPrice !== null && $maxPrice !== '') {
+            $toursQuery->where('price', '<=', $maxPrice);
+        }
+
+        // Get results (limit to 10 for dropdown)
+        $tours = $toursQuery
+            ->orderBy('title', 'asc')
+            ->limit(10)
+            ->get(['id', 'title', 'location', 'price', 'slug', 'type']);
+
+        // Return JSON response
+        return response()->json($tours);
+    }
 }
 

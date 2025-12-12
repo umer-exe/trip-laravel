@@ -23,6 +23,9 @@ Route::get('/', [SiteController::class, 'home'])->name('home');
 // Tours index - displays all tours with filtering options
 Route::get('/tours', [SiteController::class, 'toursIndex'])->name('tours.index');
 
+// AJAX search endpoint for live tour search
+Route::get('/tours/search/ajax', [SiteController::class, 'searchTours'])->name('tours.search');
+
 // Individual tour detail page - displays full itinerary and booking form
 Route::get('/tours/{slug}', [SiteController::class, 'toursShow'])->name('tours.show');
 
