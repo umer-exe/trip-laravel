@@ -1,22 +1,40 @@
 /**
  * Live AJAX Search for Tours
- * Provides real-time search results as user types in the destination field
+ * 
+ * Provides real-time search functionality on the /tours page
+ * Displays matching tours in a dropdown as user types
+ * 
+ * Features:
+ * - Debounced search (300ms delay to reduce server requests)
+ * - Searches in tour title and location fields
+ * - Filters by min/max price if specified
+ * - XSS protection via HTML escaping
+ * - Click-outside-to-close behavior
+ * - Keyboard-friendly (shows results on focus)
+ * 
+ * Backend endpoint: GET /tours/search/ajax
+ * Returns: JSON array of tour objects
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    // Get DOM elements
     const destinationInput = document.getElementById('destination');
     const minPriceInput = document.getElementById('min_price');
     const maxPriceInput = document.getElementById('max_price');
     const searchDropdown = document.getElementById('search-dropdown');
-    
+
+    // Exit if elements not found (not on tours page)
     if (!destinationInput || !searchDropdown) {
-        return; // Exit if elements not found on this page
+        return;
     }
 
+    // Timeout for debouncing search requests
     let searchTimeout = null;
 
     /**
      * Perform AJAX search and update dropdown
+     * Sends GET request to backend with search parameters
+     * Updates dropdown with results or "no results" message
      */
     function performSearch() {
         const query = destinationInput.value.trim();
@@ -29,19 +47,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Build search URL with parameters
+        // Build search URL with query parameters
+        // data-search-url attribute contains the route URL
         const searchUrl = new URL(destinationInput.dataset.searchUrl, window.location.origin);
         searchUrl.searchParams.append('q', query);
-        
+
+        // Add price filters if provided
         if (minPrice) {
             searchUrl.searchParams.append('min_price', minPrice);
         }
-        
+
         if (maxPrice) {
             searchUrl.searchParams.append('max_price', maxPrice);
         }
 
-        // Perform AJAX request
+        // Perform AJAX request using Fetch API
         fetch(searchUrl)
             .then(response => response.json())
             .then(tours => {
@@ -55,8 +75,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * Render search results in dropdown
+     * Creates HTML for each tour result with:
+     * - Tour title and location
+     * - Price (formatted with commas)
+     * - Type badge (domestic/international)
+     * - Clickable link to tour detail page
+     * 
+     * @param {Array} tours - Array of tour objects from API
      */
     function renderSearchResults(tours) {
+        // Show "no results" message if empty
         if (tours.length === 0) {
             searchDropdown.innerHTML = `
                 <div class="px-4 py-3 text-sm text-gray-500">
@@ -67,10 +95,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Build HTML for results
+        // Build HTML for each tour result
         let html = '';
         tours.forEach(tour => {
+            // Different colors for domestic vs international
             const typeColor = tour.type === 'international' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
+
             html += `
                 <a href="/tours/${tour.slug}" 
                    class="block px-4 py-3 hover:bg-gray-50 transition border-b border-gray-100 last:border-b-0">
@@ -98,12 +128,17 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         });
 
+        // Update dropdown content and show it
         searchDropdown.innerHTML = html;
         searchDropdown.classList.remove('hidden');
     }
 
     /**
-     * Escape HTML to prevent XSS
+     * Escape HTML to prevent XSS attacks
+     * Converts special characters to HTML entities
+     * 
+     * @param {string} text - Raw text to escape
+     * @returns {string} HTML-safe text
      */
     function escapeHtml(text) {
         const div = document.createElement('div');
@@ -112,7 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Format price with commas
+     * Format price with commas and 2 decimal places
+     * Example: 1234.5 → "1,234.50"
+     * 
+     * @param {number|string} price - Price to format
+     * @returns {string} Formatted price string
      */
     function formatPrice(price) {
         return parseFloat(price).toLocaleString('en-US', {
@@ -121,28 +160,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ========================================================================
+    // EVENT LISTENERS
+    // ========================================================================
+
     /**
      * Debounced search on keyup (300ms delay)
+     * Waits for user to stop typing before sending request
+     * Reduces server load and improves UX
      */
-    destinationInput.addEventListener('keyup', function() {
+    destinationInput.addEventListener('keyup', function () {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(performSearch, 300);
     });
 
     /**
-     * Also trigger search when price filters change
+     * Trigger search when min price filter changes
+     * Only if there's already a search query
      */
     if (minPriceInput) {
-        minPriceInput.addEventListener('change', function() {
-            if (destinationInput.value.trim().length > 0) {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(performSearch, 300);
-            }
-        });
-    }
-
-    if (maxPriceInput) {
-        maxPriceInput.addEventListener('change', function() {
+        minPriceInput.addEventListener('change', function () {
             if (destinationInput.value.trim().length > 0) {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(performSearch, 300);
@@ -151,18 +188,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Hide dropdown when clicking outside
+     * Trigger search when max price filter changes
+     * Only if there's already a search query
      */
-    document.addEventListener('click', function(event) {
+    if (maxPriceInput) {
+        maxPriceInput.addEventListener('change', function () {
+            if (destinationInput.value.trim().length > 0) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(performSearch, 300);
+            }
+        });
+    }
+
+    /**
+     * Hide dropdown when clicking outside search area
+     * Improves UX by closing dropdown when user clicks elsewhere
+     */
+    document.addEventListener('click', function (event) {
         if (!destinationInput.contains(event.target) && !searchDropdown.contains(event.target)) {
             searchDropdown.classList.add('hidden');
         }
     });
 
     /**
-     * Show dropdown again when focusing on input (if there are results)
+     * Show dropdown again when focusing on input
+     * Only if there are existing results to show
+     * Makes it easy to review previous search results
      */
-    destinationInput.addEventListener('focus', function() {
+    destinationInput.addEventListener('focus', function () {
         if (destinationInput.value.trim().length > 0 && searchDropdown.innerHTML.trim() !== '') {
             searchDropdown.classList.remove('hidden');
         }

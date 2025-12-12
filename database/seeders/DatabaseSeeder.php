@@ -11,8 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Run all seeders in order
         $this->call([
+            UserSeeder::class,
             TourSeeder::class,
+            ReviewSeeder::class,
+            ContactMessageSeeder::class,
         ]);
     }
 }
