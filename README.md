@@ -24,9 +24,12 @@ Key highlights include a seamless booking experience, AJAX-powered live search, 
 - **Authentication**: Secure admin access with Laravel Breeze
 
 ### API Features
-- **RESTful API**: JSON endpoints for tours data
-- **GET /api/tours**: List all active tours
-- **GET /api/tours/{id}**: Get single tour details
+- **Secure Authentication**: Laravel Passport (OAuth2) for protected endpoints
+- **RESTful API**: Full JSON CRUD operations for tours
+- **Protected Routes**: Create, Update, Delete tours (Requires Token)
+- **Public Routes**: List all tours, Get tour details
+- **Postman Support**: Ready-to-use collection included for testing
+
 
 ## 📋 Requirements
 
@@ -226,87 +229,23 @@ Uploaded images are displayed in:
 
 ## 🔌 API Endpoints
 
-### Base URL
+### API Endpoints
 
-```
-http://localhost:8000/api
-```
+#### Authentication
+- `POST /api/login` - Get Access Token (Email/Password required)
 
-### Available Endpoints
+#### Tours (Public)
+- `GET /api/tours` - List all active tours
+- `GET /api/tours/{id}` - Get single tour details
 
-#### 1. List All Tours
+#### Tours (Protected - Requires Bearer Token)
+- `POST /api/tours` - Create new tour
+- `PUT /api/tours/{id}` - Update tour
+- `DELETE /api/tours/{id}` - Delete tour
 
-**Endpoint**: `GET /api/tours`
+#### Postman Collection
+A `postman_collection.json` file is included in the project root. Import this into Postman to easily test all endpoints.
 
-**Description**: Returns all active tours with key information
-
-**Response Example**:
-
-```json
-{
-  "success": true,
-  "count": 8,
-  "data": [
-    {
-      "id": 1,
-      "title": "Discover Japan",
-      "slug": "discover-japan",
-      "location": "Tokyo, Kyoto, Osaka",
-      "duration": "10 Days / 9 Nights",
-      "price": "2499.00",
-      "type": "international",
-      "overview": "Experience the perfect blend...",
-      "highlights": ["Visit iconic Tokyo Tower"],
-      "is_featured": true,
-      "featured_image": null,
-      "thumbnail_image": "images/tours/japan.jpg"
-    }
-  ]
-}
-```
-
-#### 2. Get Single Tour
-
-**Endpoint**: `GET /api/tours/{id}`
-
-**Description**: Returns complete details for a specific tour
-
-**Parameters**:
-- `id` (integer, required): Tour ID
-
-**Response Example**:
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "title": "Discover Japan",
-    "slug": "discover-japan",
-    "overview": "Experience the perfect blend...",
-    "location": "Tokyo, Kyoto, Osaka",
-    "duration": "10 Days / 9 Nights",
-    "price": "2499.00",
-    "type": "international",
-    "highlights": ["Visit iconic Tokyo Tower"],
-    "itinerary": [
-      {
-        "day": 1,
-        "title": "Arrival in Tokyo",
-        "description": "Arrive at Narita Airport..."
-      }
-    ],
-    "available_dates": {
-      "2024-03-15": "March 15, 2024"
-    },
-    "is_featured": true,
-    "featured_image": null,
-    "thumbnail_image": "images/tours/japan.jpg",
-    "banner_image": "images/gallery/japan-1.jpg",
-    "gallery_images": ["images/gallery/japan-1.jpg"]
-  }
-}
-```
 
 **Error Response** (404):
 
