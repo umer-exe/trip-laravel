@@ -10,7 +10,7 @@ Key highlights include a seamless booking experience, AJAX-powered live search, 
 - **AJAX Live Search**: Real-time search with dropdown results as you type
 - **Advanced Filtering**: Filter tours by destination, price range, and tour type
 - **Tour Details**: Comprehensive tour information with itinerary, highlights, and gallery
-- **Shopping Cart**: Add tours to cart and complete bookings
+- **Shopping Cart**: Add tours to cart and place orders (saved to database)
 - **Payment Methods**: Secure checkout with Cash on Delivery and Card on Delivery options
 - **Contact Form**: Submit inquiries with automatic admin notifications
 
@@ -19,6 +19,7 @@ Key highlights include a seamless booking experience, AJAX-powered live search, 
 - **Featured Image Upload**: Upload featured images with live preview (JPEG, PNG, JPG, WEBP, max 1MB)
 - **Gallery Images Upload**: Upload up to 4 gallery images per tour (Select all at once, JPEG, PNG, JPG, WEBP, max 1MB each)
 - **Reviews Management**: Manage customer testimonials
+- **Orders Management**: View customer orders, invoices, and payment details
 - **Contact Messages**: View and respond to customer inquiries
 - **Authentication**: Secure admin access with Laravel Breeze
 
@@ -408,6 +409,18 @@ myapp/
 - `featured_image`: Uploaded file path (max 1MB)
 - `gallery_images`: JSON array of uploaded file paths (max 4 images, 1MB each)
 - `timestamps`: Created/updated dates
+
+### Orders Table Fields
+
+- `id`: Primary Key
+- `order_number`: Unique identifier (e.g., ATL-12345678)
+- `user_id`: Foreign key to users (nullable)
+- `total_amount`: Total order cost
+- `status`: pending | processing | completed | cancelled
+- `payment_method`: cod | card
+- `check_in_date`: Travel start date (stored in items now)
+- `contact_details`: Name, email, phone, address stored directly on order
+- `timestamps`: Order placement time
 
 ### Running Migrations
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tour;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * ApiController - RESTful API for Tours
@@ -149,6 +150,102 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'data' => $tour,
+        ]);
+    }
+    /**
+     * Create a new tour (Protected)
+     * 
+     * Endpoint: POST /api/tours
+     * Requires: Authorization: Bearer {token}
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'duration' => 'required|string|max:255',
+            'type' => 'required|in:domestic,international',
+            'overview' => 'required|string',
+            'status' => 'in:active,inactive'
+        ]);
+
+        $tour = new Tour($validated);
+        $tour->slug = \Illuminate\Support\Str::slug($validated['title']) . '-' . uniqid(); // Ensure unique slug
+        
+        // Defaults for required fields if not provided
+        $tour->highlights = $request->input('highlights', []);
+        $tour->itinerary = $request->input('itinerary', []);
+        $tour->available_dates = $request->input('available_dates', []);
+        $tour->status = $request->input('status', 'active');
+        
+        $tour->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tour created successfully',
+            'data' => $tour
+        ], 201);
+    }
+
+    /**
+     * Update an existing tour (Protected)
+     * 
+     * Endpoint: PUT /api/tours/{id}
+     * Requires: Authorization: Bearer {token}
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $tour = Tour::find($id);
+
+        if (!$tour) {
+            return response()->json(['success' => false, 'message' => 'Tour not found'], 404);
+        }
+
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'location' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric|min:0',
+            'duration' => 'sometimes|string|max:255',
+            'type' => 'sometimes|in:domestic,international',
+            'overview' => 'sometimes|string',
+            'status' => 'sometimes|in:active,inactive'
+        ]);
+
+        $tour->fill($validated);
+        
+        if (isset($validated['title'])) {
+             $tour->slug = \Illuminate\Support\Str::slug($validated['title']) . '-' . $tour->id;
+        }
+
+        $tour->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tour updated successfully',
+            'data' => $tour
+        ]);
+    }
+
+    /**
+     * Delete a tour (Protected)
+     * 
+     * Endpoint: DELETE /api/tours/{id}
+     * Requires: Authorization: Bearer {token}
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $tour = Tour::find($id);
+
+        if (!$tour) {
+            return response()->json(['success' => false, 'message' => 'Tour not found'], 404);
+        }
+
+        $tour->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tour deleted successfully'
         ]);
     }
 }
