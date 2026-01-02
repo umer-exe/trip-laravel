@@ -136,6 +136,16 @@ Route::middleware(['auth'])
          */
         Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)
             ->except(['show']);
+
+        /**
+         * Orders Management - View and Delete only
+         * Routes generated:
+         * - GET    /admin/orders           → index (list all)
+         * - GET    /admin/orders/{id}      → show (view details)
+         * - DELETE /admin/orders/{id}      → destroy (delete)
+         */
+        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)
+            ->only(['index', 'show', 'destroy']);
     });
 
 // ============================================================================

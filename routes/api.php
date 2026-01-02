@@ -53,3 +53,41 @@ Route::get('/tours', [ApiController::class, 'tours'])->name('api.tours.index');
  * Error: { success: false, message: "Tour not found" } (404)
  */
 Route::get('/tours/{id}', [ApiController::class, 'tour'])->name('api.tours.show');
+
+// ============================================================================
+// AUTHENTICATION & PROTECTED ROUTES
+// ============================================================================
+
+/**
+ * Login Endpoint
+ * Issues Access Token for API usage
+ */
+Route::post('/login', function (Request $request) {
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = Auth::user();
+        $token = $user->createToken('API Token')->accessToken;
+        
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+            'token' => $token
+        ]);
+    }
+    
+    return response()->json(['error' => 'Unauthorized'], 401);
+});
+
+/**
+ * Protected Tour Operations
+ * Requires: Authorization: Bearer {token}
+ */
+Route::middleware('auth:api')->group(function () {
+    Route::post('/tours', [ApiController::class, 'store']);
+    Route::put('/tours/{id}', [ApiController::class, 'update']);
+    Route::delete('/tours/{id}', [ApiController::class, 'destroy']);
+    
+    // Test endpoint to verify token
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});

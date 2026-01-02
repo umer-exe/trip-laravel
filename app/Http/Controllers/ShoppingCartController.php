@@ -60,10 +60,10 @@ class ShoppingCartController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
-        // Store order data in session (in a real app, this would be saved to database)
-        $orderData = [
-            'order_number' => 'ATL-' . strtoupper(uniqid()),
-            'customer' => [
+        try {
+            $order = \App\Models\Order::create([
+                'order_number' => 'ATL-' . strtoupper(uniqid()),
+                'user_id' => auth()->id(), // Associate with logged-in user if available
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
@@ -71,21 +71,25 @@ class ShoppingCartController extends Controller
                 'address' => $request->address,
                 'city' => $request->city,
                 'country' => $request->country,
-            ],
-            'items' => $cartItems,
-            'total' => $total,
-            'payment_method' => $request->payment_method,
-            'special_requests' => $request->special_requests,
-            'created_at' => now()->format('Y-m-d H:i:s'),
-            'demo_mode' => true, // Flag to indicate this is demo mode
-        ];
+                'total_amount' => $total,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+                'special_requests' => $request->special_requests,
+            ]);
 
-        try {
-            // In a real application, you would save to database here
-            // $order = Order::create($orderData);
-            // For now, we'll just store in session for demo purposes
+            foreach ($cartItems as $item) {
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'tour_id' => $item['id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['price'] * $item['quantity'],
+                    'travel_date' => $item['selected_date'],
+                ]);
+            }
             
-            session(['order' => $orderData]);
+            // Store order data in session for success page
+            session(['order' => $order]);
             
             // Clear cart
             session()->forget('cart');
@@ -93,11 +97,7 @@ class ShoppingCartController extends Controller
             return redirect()->route('shoppingcart.success');
             
         } catch (\Exception $e) {
-            // If database operations fail, still show demo mode
-            session(['order' => $orderData]);
-            session()->forget('cart');
-            
-            return redirect()->route('shoppingcart.success')->with('demo_mode', 'Shopping cart demo mode: run php artisan migrate to enable saving orders.');
+            return redirect()->back()->with('error', 'Failed to place order: ' . $e->getMessage())->withInput();
         }
     }
 

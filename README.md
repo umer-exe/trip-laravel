@@ -10,7 +10,7 @@ Key highlights include a seamless booking experience, AJAX-powered live search, 
 - **AJAX Live Search**: Real-time search with dropdown results as you type
 - **Advanced Filtering**: Filter tours by destination, price range, and tour type
 - **Tour Details**: Comprehensive tour information with itinerary, highlights, and gallery
-- **Shopping Cart**: Add tours to cart and complete bookings
+- **Shopping Cart**: Add tours to cart and place orders (saved to database)
 - **Payment Methods**: Secure checkout with Cash on Delivery and Card on Delivery options
 - **Contact Form**: Submit inquiries with automatic admin notifications
 
@@ -19,13 +19,17 @@ Key highlights include a seamless booking experience, AJAX-powered live search, 
 - **Featured Image Upload**: Upload featured images with live preview (JPEG, PNG, JPG, WEBP, max 1MB)
 - **Gallery Images Upload**: Upload up to 4 gallery images per tour (Select all at once, JPEG, PNG, JPG, WEBP, max 1MB each)
 - **Reviews Management**: Manage customer testimonials
+- **Orders Management**: View customer orders, invoices, and payment details
 - **Contact Messages**: View and respond to customer inquiries
 - **Authentication**: Secure admin access with Laravel Breeze
 
 ### API Features
-- **RESTful API**: JSON endpoints for tours data
-- **GET /api/tours**: List all active tours
-- **GET /api/tours/{id}**: Get single tour details
+- **Secure Authentication**: Laravel Passport (OAuth2) for protected endpoints
+- **RESTful API**: Full JSON CRUD operations for tours
+- **Protected Routes**: Create, Update, Delete tours (Requires Token)
+- **Public Routes**: List all tours, Get tour details
+- **Postman Support**: Ready-to-use collection included for testing
+
 
 ## 📋 Requirements
 
@@ -225,87 +229,23 @@ Uploaded images are displayed in:
 
 ## 🔌 API Endpoints
 
-### Base URL
+### API Endpoints
 
-```
-http://localhost:8000/api
-```
+#### Authentication
+- `POST /api/login` - Get Access Token (Email/Password required)
 
-### Available Endpoints
+#### Tours (Public)
+- `GET /api/tours` - List all active tours
+- `GET /api/tours/{id}` - Get single tour details
 
-#### 1. List All Tours
+#### Tours (Protected - Requires Bearer Token)
+- `POST /api/tours` - Create new tour
+- `PUT /api/tours/{id}` - Update tour
+- `DELETE /api/tours/{id}` - Delete tour
 
-**Endpoint**: `GET /api/tours`
+#### Postman Collection
+A `postman_collection.json` file is included in the project root. Import this into Postman to easily test all endpoints.
 
-**Description**: Returns all active tours with key information
-
-**Response Example**:
-
-```json
-{
-  "success": true,
-  "count": 8,
-  "data": [
-    {
-      "id": 1,
-      "title": "Discover Japan",
-      "slug": "discover-japan",
-      "location": "Tokyo, Kyoto, Osaka",
-      "duration": "10 Days / 9 Nights",
-      "price": "2499.00",
-      "type": "international",
-      "overview": "Experience the perfect blend...",
-      "highlights": ["Visit iconic Tokyo Tower"],
-      "is_featured": true,
-      "featured_image": null,
-      "thumbnail_image": "images/tours/japan.jpg"
-    }
-  ]
-}
-```
-
-#### 2. Get Single Tour
-
-**Endpoint**: `GET /api/tours/{id}`
-
-**Description**: Returns complete details for a specific tour
-
-**Parameters**:
-- `id` (integer, required): Tour ID
-
-**Response Example**:
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "title": "Discover Japan",
-    "slug": "discover-japan",
-    "overview": "Experience the perfect blend...",
-    "location": "Tokyo, Kyoto, Osaka",
-    "duration": "10 Days / 9 Nights",
-    "price": "2499.00",
-    "type": "international",
-    "highlights": ["Visit iconic Tokyo Tower"],
-    "itinerary": [
-      {
-        "day": 1,
-        "title": "Arrival in Tokyo",
-        "description": "Arrive at Narita Airport..."
-      }
-    ],
-    "available_dates": {
-      "2024-03-15": "March 15, 2024"
-    },
-    "is_featured": true,
-    "featured_image": null,
-    "thumbnail_image": "images/tours/japan.jpg",
-    "banner_image": "images/gallery/japan-1.jpg",
-    "gallery_images": ["images/gallery/japan-1.jpg"]
-  }
-}
-```
 
 **Error Response** (404):
 
@@ -408,6 +348,18 @@ myapp/
 - `featured_image`: Uploaded file path (max 1MB)
 - `gallery_images`: JSON array of uploaded file paths (max 4 images, 1MB each)
 - `timestamps`: Created/updated dates
+
+### Orders Table Fields
+
+- `id`: Primary Key
+- `order_number`: Unique identifier (e.g., ATL-12345678)
+- `user_id`: Foreign key to users (nullable)
+- `total_amount`: Total order cost
+- `status`: pending | processing | completed | cancelled
+- `payment_method`: cod | card
+- `check_in_date`: Travel start date (stored in items now)
+- `contact_details`: Name, email, phone, address stored directly on order
+- `timestamps`: Order placement time
 
 ### Running Migrations
 
