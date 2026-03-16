@@ -293,70 +293,11 @@
     setupImagePreview('thumbnail_image', 'thumbnail-preview', 'thumbnail-placeholder', 1);
     setupImagePreview('banner_image', 'banner-preview', 'banner-placeholder', 1);
     setupImagePreview('featured_image', 'image-preview', 'preview-placeholder', 1);
-    
-    // Gallery images preview (multiple files, max 4)
-    document.getElementById('gallery_images')?.addEventListener('change', function(event) {
-        const files = event.target.files;
-        const container = document.getElementById('gallery-previews');
-        const placeholder = document.getElementById('gallery-placeholder');
-        
-        // Validate maximum 4 files
-        if (files.length > 4) {
-            alert('You can only upload a maximum of 4 gallery images');
-            event.target.value = '';
-            return;
-        }
-        
-        if (files.length > 0) {
-            container.innerHTML = ''; // Clear previous previews
-            if (placeholder) placeholder.classList.add('hidden');
-            
-            let hasError = false;
-            
-            Array.from(files).forEach((file, index) => {
-                // Validate file size (1MB)
-                if (file.size > 1024 * 1024) {
-                    alert(`Image ${index + 1} exceeds 1MB size limit`);
-                    event.target.value = '';
-                    container.innerHTML = '';
-                    if (placeholder) placeholder.classList.remove('hidden');
-                    hasError = true;
-                    return;
-                }
-                
-                // Validate file type
-                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-                if (!validTypes.includes(file.type)) {
-                    alert(`Image ${index + 1} is not a valid image file`);
-                    event.target.value = '';
-                    container.innerHTML = '';
-                    if (placeholder) placeholder.classList.remove('hidden');
-                    hasError = true;
-                    return;
-                }
-                
-                if (!hasError) {
-                    // Read and display image
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const imgWrapper = document.createElement('div');
-                        imgWrapper.className = 'relative';
-                        imgWrapper.innerHTML = `
-                            <img src="${e.target.result}" alt="Gallery ${index + 1}" class="w-full h-32 object-cover rounded">
-                            <span class="absolute top-1 right-1 bg-indigo-600 text-white text-xs px-2 py-1 rounded">${index + 1}</span>
-                        `;
-                        container.appendChild(imgWrapper);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-    });
 </script>
 
 {{-- Gallery Images Upload with Preview --}}
 <div class="mt-6">
-    <label class="block text-sm font-medium text-gray-700 mb-2">Gallery Images Upload (Max 4 images)</label>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Gallery Images Upload (Select all 4 at once)</label>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <input type="file" 
@@ -365,7 +306,7 @@
                    accept="image/jpeg,image/png,image/jpg,image/webp"
                    multiple
                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
-            <p class="text-xs text-gray-500 mt-1">Accepted: JPEG, PNG, JPG, WEBP (Max: 1MB each, up to 4 images)</p>
+            <p class="text-xs text-gray-500 mt-1">Select up to 4 images at once - selecting new images will replace all previous ones</p>
             @error('gallery_images')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
@@ -402,6 +343,75 @@
         </div>
     </div>
 </div>
+
+{{-- Gallery Images Preview JavaScript --}}
+<script>
+    // Gallery images preview (multiple files, max 4)
+    // Must be after the HTML elements are defined
+    document.addEventListener('DOMContentLoaded', function() {
+        const galleryInput = document.getElementById('gallery_images');
+        
+        if (galleryInput) {
+            galleryInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+                const container = document.getElementById('gallery-previews');
+                const placeholder = document.getElementById('gallery-placeholder');
+                
+                // Validate maximum 4 files
+                if (files.length > 4) {
+                    alert('You can only upload a maximum of 4 gallery images');
+                    event.target.value = '';
+                    return;
+                }
+                
+                if (files.length > 0) {
+                    container.innerHTML = ''; // Clear previous previews
+                    if (placeholder) placeholder.classList.add('hidden');
+                    
+                    let hasError = false;
+                    
+                    Array.from(files).forEach((file, index) => {
+                        // Validate file size (1MB)
+                        if (file.size > 1024 * 1024) {
+                            alert(`Image ${index + 1} exceeds 1MB size limit`);
+                            event.target.value = '';
+                            container.innerHTML = '';
+                            if (placeholder) placeholder.classList.remove('hidden');
+                            hasError = true;
+                            return;
+                        }
+                        
+                        // Validate file type
+                        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                        if (!validTypes.includes(file.type)) {
+                            alert(`Image ${index + 1} is not a valid image file`);
+                            event.target.value = '';
+                            container.innerHTML = '';
+                            if (placeholder) placeholder.classList.remove('hidden');
+                            hasError = true;
+                            return;
+                        }
+                        
+                        if (!hasError) {
+                            // Read and display image
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const imgWrapper = document.createElement('div');
+                                imgWrapper.className = 'relative';
+                                imgWrapper.innerHTML = `
+                                    <img src="${e.target.result}" alt="Gallery ${index + 1}" class="w-full h-32 object-cover rounded">
+                                    <span class="absolute top-1 right-1 bg-indigo-600 text-white text-xs px-2 py-1 rounded">${index + 1}</span>
+                                `;
+                                container.appendChild(imgWrapper);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
 
 <div class="mt-6">
     <label class="block text-sm font-medium text-gray-700 mb-1">Highlights (one per line)</label>

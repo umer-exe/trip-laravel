@@ -119,11 +119,23 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <div class="ml-4">
+                                <div class="ml-4 flex-1">
                                     <h3 class="text-lg font-semibold text-gray-900">Phone</h3>
-                                    <a href="tel:{{ $contactInfo['phone'] }}" class="text-indigo-600 hover:text-indigo-700 mt-1 block">
-                                        {{ $contactInfo['phone'] }}
-                                    </a>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span 
+                                            onclick="copyPhoneNumber('{{ $contactInfo['phone'] }}')" 
+                                            class="text-indigo-600 hover:text-indigo-700 cursor-pointer group relative"
+                                            title="Click to copy">
+                                            {{ $contactInfo['phone'] }}
+                                            <span class="absolute -top-8 left-0 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                                                Click to copy
+                                            </span>
+                                        </span>
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <p id="copy-success" class="text-xs text-green-600 mt-1 hidden">✓ Copied to clipboard!</p>
                                 </div>
                             </div>
 
@@ -245,5 +257,32 @@
             </div>
         </div>
     </section>
+
+    {{-- Copy to Clipboard Script --}}
+    <script>
+        /**
+         * Copy phone number to clipboard
+         * Shows success message for 2 seconds
+         * 
+         * @param {string} phoneNumber - Phone number to copy
+         */
+        function copyPhoneNumber(phoneNumber) {
+            // Use modern Clipboard API
+            navigator.clipboard.writeText(phoneNumber).then(function() {
+                // Show success message
+                const successMsg = document.getElementById('copy-success');
+                successMsg.classList.remove('hidden');
+                
+                // Hide after 2 seconds
+                setTimeout(function() {
+                    successMsg.classList.add('hidden');
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback for older browsers
+                console.error('Failed to copy:', err);
+                alert('Phone number: ' + phoneNumber);
+            });
+        }
+    </script>
 
 @endsection

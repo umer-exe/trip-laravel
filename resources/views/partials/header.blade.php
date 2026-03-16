@@ -48,6 +48,13 @@
                     <a href="{{ route('admin.tours.index') }}" class="text-indigo-600 hover:text-indigo-800 px-3 py-2 text-sm font-medium flex items-center">
                         <span>→ Return to Admin Panel</span>
                     </a>
+                @else
+                    {{-- UNCOMMENT BELOW TO ENABLE LOGIN BUTTON --}}
+                {{--
+                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition">
+                        Login
+                    </a>
+                --}}
                 @endauth
             </div>
 
@@ -85,6 +92,17 @@
                     @endif
                 </div>
             </a>
+
+            {{-- UNCOMMENT BELOW TO ENABLE MOBILE LOGIN BUTTON --}}
+            {{--
+            @guest
+                <a href="{{ route('login') }}" class="block text-gray-700 hover:text-indigo-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium">
+                    Login
+                </a>
+            @endguest
+            --}}
+            
+            
         </div>
     </nav>
 </header>

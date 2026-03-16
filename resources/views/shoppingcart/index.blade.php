@@ -1,3 +1,14 @@
+{{-- 
+    Shopping Cart & Checkout Page
+    
+    This view serves as a combined Shopping Cart and Checkout page.
+    It displays:
+    1. Customer Information Form (Name, Email, Phone, Address)
+    2. Payment Method Selection (Cash/Card on Delivery)
+    3. Cart Summary (List of selected tours with ability to update quantities or remove items)
+    
+    It submits to 'shoppingcart.store' for order processing.
+--}}
 {{-- Shopping Cart Page - Combined cart and checkout --}}
 @extends('layouts.app')
 
@@ -118,27 +129,19 @@
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
                             <div class="space-y-3">
                                 <div class="flex items-center">
-                                    <input type="radio" id="credit_card" name="payment_method" value="credit_card" 
-                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                                           {{ old('payment_method', 'credit_card') == 'credit_card' ? 'checked' : '' }}>
-                                    <label for="credit_card" class="ml-3 text-sm font-medium text-gray-700">
-                                        Credit/Debit Card
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer" 
-                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                                           {{ old('payment_method') == 'bank_transfer' ? 'checked' : '' }}>
-                                    <label for="bank_transfer" class="ml-3 text-sm font-medium text-gray-700">
-                                        Bank Transfer
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
                                     <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery" 
                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                                           {{ old('payment_method') == 'cash_on_delivery' ? 'checked' : '' }}>
+                                           {{ old('payment_method', 'cash_on_delivery') == 'cash_on_delivery' ? 'checked' : '' }}>
                                     <label for="cash_on_delivery" class="ml-3 text-sm font-medium text-gray-700">
                                         Cash on Delivery
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="card_on_delivery" name="payment_method" value="card_on_delivery" 
+                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                                           {{ old('payment_method') == 'card_on_delivery' ? 'checked' : '' }}>
+                                    <label for="card_on_delivery" class="ml-3 text-sm font-medium text-gray-700">
+                                        Card on Delivery
                                     </label>
                                 </div>
                             </div>
