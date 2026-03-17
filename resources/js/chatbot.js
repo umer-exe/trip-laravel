@@ -21,6 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
         messages.scrollTop = messages.scrollHeight;
     }
 
+    /** Escape HTML special characters to prevent XSS. */
+    function escapeHtml(text) {
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+        return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+
+    /** Convert Markdown to HTML (bold and simple bullet lists) */
+    function renderMarkdown(text) {
+        let html = escapeHtml(text);
+        // Convert **bold** to <strong>
+        html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        // Convert simple bullet lists
+        html = html.replace(/^- (.*)$/gm, "<li>$1</li>");
+        // Wrap list items in <ul> if any exist
+        if (html.includes("<li>")) {
+            html = "<ul>" + html + "</ul>";
+        }
+        return html;
+    }
+
     /**
      * Append a message bubble to the chat window.
      * @param {'user'|'bot'} role
@@ -39,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </svg>
                 </div>
                 <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm border border-gray-100 max-w-[85%]">
-                    <p class="text-sm text-gray-700 whitespace-pre-wrap">${escapeHtml(text)}</p>
+                    <p class="text-sm text-gray-700 whitespace-pre-wrap">${renderMarkdown(text)}</p>
                 </div>`;
         } else {
             wrapper.innerHTML = `
@@ -79,27 +99,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return el;
     }
 
-    /** Escape HTML special characters to prevent XSS. */
-    function escapeHtml(text) {
-        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-        return String(text).replace(/[&<>"']/g, m => map[m]);
-    }
-
     // ── Main send logic ───────────────────────────────────────────────────────
 
     async function sendMessage() {
         const question = input.value.trim();
         if (!question) return;
 
-        // Clear input & disable controls while waiting
         input.value = '';
         input.disabled = true;
         sendBtn.disabled = true;
 
-        // Show user bubble
         appendMessage('user', question);
 
-        // Show typing indicator
         const typingEl = showTypingIndicator();
 
         try {

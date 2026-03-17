@@ -6,7 +6,7 @@ and exposes a /chat endpoint using a ConversationalRetrievalChain.
 Powered by Groq (LLM) and HuggingFace (Embeddings) for a credit-free experience.
 
 Run:
-    uvicorn app:app --host 0.0.0.0 --port 8001 --reload
+    uvicorn app:app --host 0.0.0.0 --port 8005 --reload
 """
 
 import os
@@ -36,7 +36,7 @@ if not GROQ_API_KEY:
     raise RuntimeError("GROQ_API_KEY is not set. Check your .env file.")
 
 # ── FastAPI app ───────────────────────────────────────────────────────────────
-app = FastAPI(title="Atlas Tours AI Service (Groq)", version="1.1.0")
+app = FastAPI(title="Atlas Tours AI Service (Groq)", version="1.2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -52,18 +52,19 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
 
-
-# ── System prompt ─────────────────────────────────────────────────────────────
+# ── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 SYSTEM_PROMPT = """You are an AI travel assistant for Atlas Tours & Travel.
 Your role is to help users discover and learn about tour packages available on the platform.
 
 Guidelines:
 - Only recommend tours that exist in the provided context.
-- When suggesting tours, present them clearly with: Tour Name, Location, Duration, Price, and Highlights.
-- If a user asks about a specific tour, give a concise and helpful summary.
+- If the user asks for general information, give a concise and helpful response.
+- If the user explicitly asks for more detail, provide a detailed answer including:
+  Tour Name, Location, Duration, Price, Type, Highlights, Description.
+- If the question is irrelevant or unrelated to tours, politely inform the user that
+  you can only provide information about tours and encourage travel-related questions.
 - Encourage follow-up questions to help the user find the perfect tour.
-- If information is unavailable, honestly say you couldn't find it — never invent details.
-- Keep responses friendly, professional, and enthusiastic about travel.
+- Always keep responses friendly, professional, and enthusiastic about travel.
 
 Context:
 {context}
@@ -83,7 +84,6 @@ def fetch_tours() -> list[dict]:
         print(f"[ERROR] Could not fetch tours from Laravel API: {e}")
         return []
 
-
 # ── Helper: convert tours to LangChain Documents ────────────────────────────
 def tours_to_documents(tours: list[dict]) -> list[Document]:
     """Format each tour as a readable LangChain Document."""
@@ -92,7 +92,6 @@ def tours_to_documents(tours: list[dict]) -> list[Document]:
         highlights = tour.get("highlights", "")
         if isinstance(highlights, list):
             highlights = ", ".join(highlights)
-
         content = (
             f"Tour: {tour.get('title', 'N/A')}\n"
             f"Location: {tour.get('location', 'N/A')}\n"
@@ -105,20 +104,17 @@ def tours_to_documents(tours: list[dict]) -> list[Document]:
         documents.append(Document(page_content=content, metadata={"title": tour.get("title", "")}))
     return documents
 
-
-# ── Build vector store ────────────────────────────────────────────────────────
+# ── Build vector store ───────────────────────────────────────────────────────
 def build_vector_store(documents: list[Document]) -> FAISS:
     """Split documents and embed them into a FAISS vector store using local embeddings."""
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
     
-    # Use free, local embeddings
     print("[INFO] Initializing HuggingFace embeddings (local model)...")
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     return FAISS.from_documents(chunks, embeddings)
 
-
-# ── Build conversational chain ────────────────────────────────────────────────
+# ── Build conversational chain ───────────────────────────────────────────────
 def build_chain(vector_store: FAISS) -> ConversationalRetrievalChain:
     """Create a ConversationalRetrievalChain with memory and a system prompt (Groq Edition)."""
     llm = ChatGroq(
@@ -153,6 +149,15 @@ def build_chain(vector_store: FAISS) -> ConversationalRetrievalChain:
     )
     return chain
 
+# ── Optional helpers: detect detail requests or irrelevant questions ─────────
+detail_keywords = ["detail", "more info", "full description", "explain", "comprehensive", "all info"]
+irrelevant_keywords = ["weather", "politics", "sports", "math", "movies"]
+
+def is_detail_request(question: str) -> bool:
+    return any(word.lower() in question.lower() for word in detail_keywords)
+
+def is_irrelevant(question: str) -> bool:
+    return any(word.lower() in question.lower() for word in irrelevant_keywords)
 
 # ── Startup: load data and build the chain ───────────────────────────────────
 print("[INFO] Fetching tour data from Laravel API...")
@@ -169,23 +174,34 @@ vector_store = build_vector_store(tours_docs)
 conversation_chain = build_chain(vector_store)
 print("[INFO] AI service is ready (Powered by Groq).")
 
-
-# ── Chat endpoint ─────────────────────────────────────────────────────────────
+# ── Chat endpoint ───────────────────────────────────────────────────────────
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """Receive a user question and return the AI assistant's answer."""
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
+    # Pre-check irrelevant questions
+    if is_irrelevant(request.question):
+        return ChatResponse(
+            answer="I'm sorry, I can only provide information about tour packages. Feel free to ask travel-related questions!"
+        )
+
+    # Adjust prompt for detail requests
+    user_question = request.question
+    if is_detail_request(user_question):
+        user_question += " Provide full detailed information about the tours mentioned."
+    else:
+        user_question += " Keep the answer concise and clear."
+
     try:
-        result = conversation_chain({"question": request.question})
+        result = conversation_chain({"question": user_question})
         return ChatResponse(answer=result["answer"])
     except Exception as e:
         print(f"[ERROR] Chain invocation failed: {e}")
         raise HTTPException(status_code=500, detail="AI service error. Please try again.")
 
-
-# ── Health check ──────────────────────────────────────────────────────────────
+# ── Health check ─────────────────────────────────────────────────────────────
 @app.get("/health")
 async def health():
     return {"status": "ok", "tours_loaded": len(tours), "provider": "groq"}
