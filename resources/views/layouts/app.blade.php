@@ -12,7 +12,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/chatbot.js'])
 </head>
 <body class="font-sans antialiased bg-gray-50">
 {{-- Include header partial --}}
@@ -38,5 +38,11 @@
 
 {{-- Include footer partial --}}
 @include('partials.footer')
+
+{{-- AI Chatbot widget (appears on all pages) --}}
+@include('partials.chatbot')
+
+{{-- Alpine.js — required for the chatbot widget toggle --}}
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
