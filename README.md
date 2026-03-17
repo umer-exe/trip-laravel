@@ -456,3 +456,17 @@ php artisan db:seed
 # Or refresh everything
 php artisan migrate:fresh --seed
 ```
+
+---
+
+## Feature Branches: AI Chatbot
+
+I also have an AI chatbot integrated into the project for experimental and learning purposes in the `feature/ai-chatbot` branch.  
+
+**Overview:**  
+- Provides a conversational travel assistant for Atlas Tours & Travel.  
+- Implements RAG (Retrieval-Augmented Generation) using Groq LLM + FAISS + HuggingFace embeddings.  
+- Fine-tuned to give concise answers, provide detailed info on request, and handle irrelevant questions gracefully.  
+- Frontend integrated with Laravel, Tailwind CSS, and Alpine.js.  
+
+For setup instructions, running the chatbot locally, and testing, please see the [Chatbot-Setup-README.md] in the `feature/ai-chatbot` branch.
